@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import PersonalInfo from "../components/PersonalInfo";
+import AboutMe from "../components/AboutMe";
 import Education from "../components/Education";
 import Skills from "../components/Skills";
-import Projects from "../components/Projects";
 import Experience from "../components/Experience";
+import Projects from "../components/Projects";
+import Certifications from "../components/Certifications";
+import Achievements from "../components/Achievements";
+import SocialLinks from "../components/SocialLinks";
 
 function UserInformation() {
   const navigate = useNavigate();
@@ -21,10 +25,14 @@ function UserInformation() {
           Portfolio Details
         </h1>
         <PersonalInfo />
+        <AboutMe />
         <Education />
         <Skills />
-        <Projects />
         <Experience />
+        <Projects />
+        <Certifications />
+        <Achievements />
+        <SocialLinks />
         <div className="text-center mt-8">
           <button
             onClick={handleSave}
