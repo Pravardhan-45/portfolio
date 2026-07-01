@@ -10,8 +10,9 @@ A web application that enables users to create professional portfolio websites w
 - "Save & Continue" functionality to seamlessly transition to the AI analysis phase.
 
 ### 2. AI Job Analysis Integration (Member 5)
-- **Job Description Upload**: Dedicated page to paste a Job Description (`/jd-upload`).
-- **Gemini AI Integration**: A secure backend endpoint (`/api/ai/analyze`) that feeds the user's current portfolio data and the target JD into Google's Gemini AI.
+- **Job Description Upload**: Dedicated page to upload a Job Description as a PDF (`/jd-upload`).
+- **PDF Extraction**: Utilizes `multer` and `pdf-parse` (v1.1.1) to securely process and extract text from the uploaded PDF documents.
+- **Gemini AI Integration**: A secure backend endpoint (`/api/ai/analyze`) that feeds the user's current portfolio data and the extracted JD text into Google's Gemini AI.
 - **Customized Portfolio Suggestions**: Extracts highlight skills, identifies missing skills, generates a professional summary, and recommends relevant projects to emphasize.
 
 ### 3. Dashboard Hub
