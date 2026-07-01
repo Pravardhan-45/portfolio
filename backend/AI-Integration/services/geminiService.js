@@ -16,9 +16,15 @@ async function getSuggestions(prompt) {
         // The response might contain markdown like ```json ... ```, so clean it
         let text = response.text;
         text = text.replace(/```json/g, "").replace(/```/g, "").trim();
-        return JSON.parse(text);
+        
+        try {
+            return JSON.parse(text);
+        } catch (parseError) {
+            console.error("Gemini returned invalid JSON:", text);
+            throw new Error("AI returned an invalid format. Please try again.");
+        }
     } catch (error) {
-        console.error(error);
+        console.error("Gemini API Error:", error);
         throw error;
     }
 }
