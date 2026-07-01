@@ -4,30 +4,36 @@ import axios from 'axios';
 
 function JDUpload() {
   const { personalInfo, skills, projects, experience } = usePortfolio();
-  const [jd, setJd] = useState('');
+  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState(null);
   const [error, setError] = useState('');
 
   const handleAnalyze = async () => {
-    if (!jd) {
-      setError("Please paste the job description first.");
+    if (!file) {
+      setError("Please upload a PDF job description first.");
       return;
     }
     setLoading(true);
     setError('');
     try {
-      const payload = {
-        portfolio: {
-          name: personalInfo.fullName || "User",
-          skills: skills.map(s => s.name || s),
-          projects: projects,
-          experience: experience
-        },
-        jd: jd
+      const formData = new FormData();
+      formData.append('jdFile', file);
+      
+      const portfolioData = {
+        name: personalInfo.fullName || "User",
+        skills: skills.map(s => s.name || s),
+        projects: projects,
+        experience: experience
       };
+      formData.append('portfolio', JSON.stringify(portfolioData));
+
       // Assuming backend runs on 5000
-      const response = await axios.post('http://localhost:5000/api/ai/analyze', payload);
+      const response = await axios.post('http://localhost:5000/api/ai/analyze', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       setSuggestions(response.data.data);
     } catch (err) {
       setError(err.message || 'Failed to analyze portfolio');
@@ -40,22 +46,24 @@ function JDUpload() {
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8">
         <h1 className="text-3xl font-bold text-blue-700 mb-6">Analyze Job Description</h1>
         
-        <textarea
-          rows="8"
-          placeholder="Paste the Job Description here..."
-          className="w-full border rounded-lg p-3 mt-2"
-          value={jd}
-          onChange={(e) => setJd(e.target.value)}
-        ></textarea>
+        <div className="mt-4 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+          <label className="block text-gray-700 font-semibold mb-2">Upload Job Description (PDF)</label>
+          <input
+            type="file"
+            accept="application/pdf"
+            onChange={(e) => setFile(e.target.files[0])}
+            className="w-full text-gray-600"
+          />
+        </div>
         
         {error && <p className="text-red-500 mt-2">{error}</p>}
         
         <button
           onClick={handleAnalyze}
           disabled={loading}
-          className="w-full mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
         >
-          {loading ? 'Analyzing...' : 'Generate Customized Portfolio'}
+          {loading ? 'Analyzing PDF...' : 'Generate Customized Portfolio'}
         </button>
 
         {suggestions && (
