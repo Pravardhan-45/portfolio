@@ -5,7 +5,9 @@ A web application that enables users to create professional portfolio websites w
 ## Features Developed So Far
 
 ### 1. User Information Form (Member 1)
-- React context state management for Personal Information, Education, Skills, Projects, and Experience.
+- React context state management for Personal Information, About Me, Education, Skills, Projects, Experience, Certifications, Achievements, and Social Links.
+- Updated form order and layout to match the new portfolio input flow.
+- Dynamic "Add Another" functionality for Education and Projects, allowing users to add multiple entries responsively.
 - Interactive form fields linked to centralized global state.
 - "Save & Continue" functionality to seamlessly transition to the AI analysis phase.
 
