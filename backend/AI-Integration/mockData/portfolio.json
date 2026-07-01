@@ -1,0 +1,24 @@
+{
+  "name": "John Doe",
+  "skills": [
+    "Java",
+    "React",
+    "Node.js",
+    "MongoDB"
+  ],
+  "projects": [
+    {
+      "title": "Portfolio Builder",
+      "description": "Built a portfolio generation platform using React and Node.js."
+    },
+    {
+      "title": "Expense Tracker",
+      "description": "Created an expense management application."
+    }
+  ],
+  "experience": [
+    {
+      "role": "Software Developer Intern"
+    }
+  ]
+}

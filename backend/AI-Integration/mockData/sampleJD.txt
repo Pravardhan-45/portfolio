@@ -1,0 +1,10 @@
+Backend Developer
+
+Requirements:
+- Java
+- Spring Boot
+- REST APIs
+- Docker
+- AWS
+- Microservices
+- SQL
