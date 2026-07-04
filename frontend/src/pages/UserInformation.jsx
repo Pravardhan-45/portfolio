@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePortfolio } from "../context/PortfolioContext";
+import { validatePortfolioForm } from "../utils/validatePortfolioForm";
 import PersonalInfo from "../components/PersonalInfo";
 import AboutMe from "../components/AboutMe";
 import Education from "../components/Education";
@@ -11,10 +14,24 @@ import SocialLinks from "../components/SocialLinks";
 
 function UserInformation() {
   const navigate = useNavigate();
+  const { personalInfo, socialLinks, projects, education } = usePortfolio();
+  const [errors, setErrors] = useState([]);
 
   const handleSave = () => {
-    // In a full implementation, you would save to the DB here.
-    // For now, we rely on the React Context state and navigate to the JD upload page.
+    const { isValid, errors: validationErrors } = validatePortfolioForm({
+      personalInfo,
+      socialLinks,
+      projects,
+      education,
+    });
+
+    if (!isValid) {
+      setErrors(validationErrors);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      return;
+    }
+
+    setErrors([]);
     navigate("/jd-upload");
   };
 
@@ -33,6 +50,20 @@ function UserInformation() {
         <Certifications />
         <Achievements />
         <SocialLinks />
+
+        {errors.length > 0 && (
+          <div className="bg-red-50 border border-red-300 rounded-lg p-5 mb-6">
+            <p className="font-semibold text-red-700 mb-2">
+              Please fix the following before continuing:
+            </p>
+            <ul className="list-disc list-inside text-red-600 space-y-1">
+              {errors.map((message, index) => (
+                <li key={index}>{message}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div className="text-center mt-8">
           <button
             onClick={handleSave}

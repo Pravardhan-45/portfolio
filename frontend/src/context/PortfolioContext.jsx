@@ -1,6 +1,6 @@
 import { createContext, useState, useContext } from 'react';
 
-const PortfolioContext = createContext();
+export const PortfolioContext = createContext();
 
 export const usePortfolio = () => useContext(PortfolioContext);
 
