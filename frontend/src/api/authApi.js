@@ -9,6 +9,16 @@ const authClient = axios.create({
 const TOKEN_KEY = "token";
 const USER_KEY = "user";
 
+authClient.interceptors.request.use((config) => {
+  const token = getToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
 export const saveAuth = ({ token, user }) => {
   if (token) {
     localStorage.setItem(TOKEN_KEY, token);

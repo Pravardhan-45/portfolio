@@ -1,20 +1,53 @@
-import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
+import { Navigate, Routes, Route } from "react-router-dom";
+import Login from "./pages/login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import UserInformation from "./pages/UserInformation";
 import JDUpload from "./pages/JDUpload";
 import PortfolioPreview from "./pages/PortfolioPreview"; 
+import { isLoggedIn } from "./api/authApi";
+
+const ProtectedRoute = ({ children }) => {
+  return isLoggedIn() ? children : <Navigate to="/" replace />;
+};
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/userinfo" element={<UserInformation />} />
-      <Route path="/jd-upload" element={<JDUpload />} />
-      <Route path="/preview" element={<PortfolioPreview />} /> {}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/userinfo"
+        element={
+          <ProtectedRoute>
+            <UserInformation />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/jd-upload"
+        element={
+          <ProtectedRoute>
+            <JDUpload />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/preview"
+        element={
+          <ProtectedRoute>
+            <PortfolioPreview />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
