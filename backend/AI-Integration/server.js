@@ -9,6 +9,7 @@ const getAuthConfig = require("../auth/config/authConfig");
 const connectDatabase = require("../auth/config/database");
 const createAuthRoutes = require("../auth/routes/authRoutes");
 const aiRoutes = require("./routes/aiRoutes");
+const createPortfolioRoutes = require("../Portfolio/routes/portfolioRoutes");
 
 const app = express();
 
@@ -25,6 +26,14 @@ app.use(
     })
 );
 app.use("/api/ai", aiRoutes);
+app.use(
+    "/api/portfolio",
+    createPortfolioRoutes({
+        express,
+        mongoose,
+        jwt
+    })
+);
 
 const PORT = process.env.PORT || 5000;
 
