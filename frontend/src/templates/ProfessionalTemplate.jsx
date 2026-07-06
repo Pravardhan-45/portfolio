@@ -2,25 +2,32 @@ import React, { useContext } from 'react';
 import { PortfolioContext } from '../context/PortfolioContext';
 
 const ProfessionalTemplate = () => {
-  const { portfolioData } = useContext(PortfolioContext);
+  const { 
+    personalInfo, 
+    aboutMe, 
+    socialLinks, 
+    skills, 
+    experience, 
+    projects, 
+    education 
+  } = useContext(PortfolioContext);
 
-  // Realistic fallback data for testing the UI layout
-  const data = portfolioData || {
-    personalInfo: {
+  const data = {
+    personalInfo: personalInfo?.fullName ? personalInfo : {
       name: "Arun Kumar Swami",
       role: "Software Engineer",
       email: "arun@example.com",
       phone: "+91 9876543210",
       location: "Lucknow, India",
     },
-    aboutMe: "Driven Software Engineer with a strong foundation in data structures, competitive programming, and backend architecture. Passionate about leveraging developer tools and generative AI to build scalable applications.",
-    socialLinks: {
+    aboutMe: aboutMe || "Driven Software Engineer with a strong foundation in data structures, competitive programming, and backend architecture. Passionate about leveraging developer tools and generative AI to build scalable applications.",
+    socialLinks: socialLinks || {
       github: "https://github.com/",
       linkedin: "https://linkedin.com/",
       portfolio: "https://myportfolio.com"
     },
-    skills: ["React", "Node.js", "MongoDB Cloud", "Docker", "Postman", "Generative AI", "C++"],
-    experience: [
+    skills: skills?.length > 0 ? skills.map(s => s.name || s) : ["React", "Node.js", "MongoDB Cloud", "Docker", "Postman", "Generative AI", "C++"],
+    experience: experience?.length > 0 && experience[0].role ? experience : [
       {
         role: "Technical Solution Engineer (Intern)",
         company: "AlgoUniversity",
@@ -34,7 +41,7 @@ const ProfessionalTemplate = () => {
         description: "Engaged in the talent acquisition process for building enterprise-level financial applications."
       }
     ],
-    projects: [
+    projects: projects?.length > 0 && projects[0].name ? projects : [
       {
         title: "Flipkart GRiD 6.0",
         description: "Collaborated on team-based engineering challenges and technical problem-solving.",
@@ -48,7 +55,7 @@ const ProfessionalTemplate = () => {
         link: "#"
       }
     ],
-    education: [
+    education: education?.length > 0 && education[0].degree ? education : [
       {
         degree: "Computer Science",
         institution: "IIIT Lucknow",
@@ -68,9 +75,16 @@ const ProfessionalTemplate = () => {
         
         {/* --- Left Sidebar --- */}
         <aside className="w-full md:w-1/3 bg-slate-800 text-white p-8 flex flex-col">
-          <div className="mb-10">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2 tracking-tight">{data.personalInfo?.name}</h1>
-            <h2 className="text-lg text-slate-300 font-medium">{data.personalInfo?.role}</h2>
+          <div className="mb-10 text-center md:text-left">
+            {data.personalInfo?.profilePhoto && (
+              <img 
+                src={data.personalInfo.profilePhoto} 
+                alt="Profile" 
+                className="w-32 h-32 rounded-full object-cover border-4 border-slate-600 mb-6 mx-auto md:mx-0 shadow-lg"
+              />
+            )}
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 tracking-tight">{data.personalInfo?.fullName || data.personalInfo?.name}</h1>
+            <h2 className="text-lg text-slate-300 font-medium">{data.personalInfo?.role || "Software Engineer"}</h2>
           </div>
 
           <div className="space-y-6 mb-10 flex-grow">
@@ -96,8 +110,8 @@ const ProfessionalTemplate = () => {
                 {data.education.map((edu, index) => (
                   <div key={index}>
                     <p className="font-medium text-white">{edu.degree}</p>
-                    <p className="text-sm text-slate-400">{edu.institution}</p>
-                    <p className="text-xs text-slate-500 mt-1">{edu.year}</p>
+                    <p className="text-sm text-slate-400">{edu.institution || edu.institute}</p>
+                    <p className="text-xs text-slate-500 mt-1">{edu.year || `${edu.startYear} - ${edu.endYear}`}</p>
                   </div>
                 ))}
               </div>
@@ -146,14 +160,18 @@ const ProfessionalTemplate = () => {
               <div className="space-y-6">
                 {data.projects.map((proj, index) => (
                   <div key={index} className="bg-neutral-50 p-5 rounded-lg border border-neutral-100">
-                    <h3 className="text-lg font-bold text-slate-800 mb-1">{proj.title}</h3>
+                    <h3 className="text-lg font-bold text-slate-800 mb-1">{proj.title || proj.name}</h3>
                     <p className="text-neutral-600 text-sm mb-3">{proj.description}</p>
                     <div className="flex flex-wrap gap-2">
                       {proj.techStack?.map((tech, i) => (
                         <span key={i} className="text-xs font-semibold text-slate-600 bg-neutral-200 px-2 py-1 rounded">
                           {tech}
                         </span>
-                      ))}
+                      )) || (
+                        <span className="text-xs font-semibold text-slate-600 bg-neutral-200 px-2 py-1 rounded">
+                          {proj.technologies}
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}

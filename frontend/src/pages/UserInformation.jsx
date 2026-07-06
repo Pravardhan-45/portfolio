@@ -64,7 +64,7 @@ function UserInformation() {
         setSocialLinks(portfolio.socialLinks || {});
       } catch (err) {
         if (err.response?.status !== 404 && isMounted) {
-          setErrors(["Unable to load your saved portfolio. Please try again."]);
+          setErrors([{ message: "Unable to load your saved portfolio. Please try again." }]);
         }
       } finally {
         if (isMounted) {
@@ -145,7 +145,7 @@ function UserInformation() {
       const message =
         err.response?.data?.message ||
         "Unable to save your portfolio. Please try again.";
-      setErrors([message]);
+      setErrors([{ message }]);
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } finally {
       setSavingPortfolio(false);
@@ -153,48 +153,86 @@ function UserInformation() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-5">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-blue-700 mb-10">
-          Portfolio Details
-        </h1>
-        {loadingPortfolio && (
-          <p className="text-center text-blue-600 mb-6">
-            Loading saved portfolio...
+    <div className="min-h-screen bg-slate-50 font-sans">
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white py-16 px-5 mb-10 shadow-lg">
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 drop-shadow-md">
+            Build Your Portfolio
+          </h1>
+          <p className="text-lg md:text-xl text-blue-100 font-medium max-w-2xl mx-auto">
+            Fill in the details below to generate a stunning, AI-powered portfolio instantly.
           </p>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-5 pb-32">
+        {loadingPortfolio && (
+          <div className="flex justify-center items-center mb-8">
+            <span className="animate-pulse bg-blue-100 text-blue-800 px-6 py-2 rounded-full font-medium shadow-sm">
+              Loading your saved portfolio...
+            </span>
+          </div>
         )}
-        <PersonalInfo />
-        <AboutMe />
-        <Education />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Certifications />
-        <Achievements />
-        <SocialLinks />
+        
+        <div className="space-y-8">
+          <PersonalInfo />
+          <AboutMe />
+          <Education />
+          <Skills />
+          <Experience />
+          <Projects />
+          <Certifications />
+          <Achievements />
+          <SocialLinks />
+        </div>
 
         {errors.length > 0 && (
-          <div className="bg-red-50 border border-red-300 rounded-lg p-5 mb-6">
-            <p className="font-semibold text-red-700 mb-2">
-              Please fix the following before continuing:
-            </p>
-            <ul className="list-disc list-inside text-red-600 space-y-1">
-              {errors.map((message, index) => (
-                <li key={index}>{message}</li>
+          <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-6 mt-10 shadow-sm">
+            <h3 className="font-bold text-red-800 mb-2 text-lg">
+              Action Required
+            </h3>
+            <p className="text-red-700 mb-3">Please fix the following issues before continuing:</p>
+            <ul className="list-disc list-inside text-red-600 space-y-1.5 font-medium">
+              {errors.map((err, index) => (
+                <li
+                  key={index}
+                  className="cursor-pointer hover:text-red-800 hover:underline transition-colors"
+                  onClick={() => {
+                    if (err.fieldId) {
+                      const el = document.getElementById(err.fieldId);
+                      if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        el.focus();
+                      }
+                    }
+                  }}
+                >
+                  {err.message || err}
+                </li>
               ))}
             </ul>
           </div>
         )}
+      </div>
 
-        <div className="text-center mt-8">
+      {/* Sticky Bottom Save Bar */}
+      <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] p-4 z-50">
+        <div className="max-w-6xl mx-auto flex justify-center md:justify-end">
           <button
             onClick={handleSave}
             disabled={savingPortfolio}
-            className="bg-blue-600 text-white px-10 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-lg px-12 py-3 rounded-full hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
           >
-            {savingPortfolio
-              ? "Saving..."
-              : "Save & Continue to JD Analysis"}
+            {savingPortfolio ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+              </span>
+            ) : "Save & Continue to JD Analysis"}
           </button>
         </div>
       </div>

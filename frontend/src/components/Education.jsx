@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 
 function Education() {
@@ -108,24 +108,23 @@ function Education() {
                 />
               </div>
               <div>
-                <label className="font-semibold">Start Year</label>
+                <label className="font-semibold">Start Date</label>
                 <input
-                  type="number"
+                  type="month"
                   name="startYear"
                   value={entry.startYear}
                   onChange={(e) => handleChange(index, e)}
-                  placeholder="2022"
                   className="w-full border rounded-lg p-3 mt-2"
                 />
               </div>
               <div>
-                <label className="font-semibold">End Year</label>
+                <label className="font-semibold">End Date (or Expected)</label>
                 <input
-                  type="number"
+                  id={`input-education-${index}-endYear`}
+                  type="month"
                   name="endYear"
                   value={entry.endYear}
                   onChange={(e) => handleChange(index, e)}
-                  placeholder="2026"
                   className="w-full border rounded-lg p-3 mt-2"
                 />
               </div>

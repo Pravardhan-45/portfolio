@@ -23,7 +23,7 @@ function Login() {
     try {
       const data = await loginUser({ email, password });
       saveAuth({ token: data.token, user: data.user });
-      navigate("/dashboard");
+      navigate("/userinfo");
     } catch (err) {
       const message =
         err.response?.data?.message ||

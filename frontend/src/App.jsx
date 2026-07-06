@@ -1,7 +1,7 @@
 import { Navigate, Routes, Route } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+
 import UserInformation from "./pages/UserInformation";
 import JDUpload from "./pages/JDUpload";
 import PortfolioPreview from "./pages/PortfolioPreview"; 
@@ -16,14 +16,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
+
       <Route
         path="/userinfo"
         element={
