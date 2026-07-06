@@ -1,105 +1,120 @@
 const path = require("path");
+const fs = require("fs-extra");
+
 const {
     ensureDirectoryExists,
     copyDirectory,
     pathExists,
-    joinPath,
 } = require("../utils/fileUtils");
 
-/**
- * Root directory containing all portfolio templates.
- *
- * Expected Structure:
- *
- * frontend/
- * └── templates/
- *      ├── modern/
- *      ├── minimal/
- *      └── professional/
- */
-const TEMPLATE_ROOT = path.resolve(
-    __dirname,
-    "../../../frontend/templates"
-);
+// Generator/starter
+const STARTER_ROOT = path.resolve(__dirname, "../starter");
+
+// Generator/generated
+const GENERATED_ROOT = path.resolve(__dirname, "../generated");
 
 /**
- * Generated projects directory.
- */
-const GENERATED_ROOT = path.resolve(
-    __dirname,
-    "../generated"
-);
-
-/**
- * Returns absolute path of a template.
- *
- * @param {string} templateName
- * @returns {string}
- */
-function getTemplatePath(templateName) {
-    return joinPath(TEMPLATE_ROOT, templateName);
-}
-
-/**
- * Returns generated project path.
+ * Copies the complete starter project.
  *
  * @param {string} projectFolderName
- * @returns {string}
+ * @returns {Promise<string>}
  */
-function getGeneratedProjectPath(projectFolderName) {
-    return joinPath(GENERATED_ROOT, projectFolderName);
-}
-
-/**
- * Validates whether a template exists.
- *
- * @param {string} templateName
- */
-async function validateTemplate(templateName) {
-    const templatePath = getTemplatePath(templateName);
-
-    const exists = await pathExists(templatePath);
-
-    if (!exists) {
-        throw new Error(
-            `Template "${templateName}" does not exist.`
-        );
+async function copyStarter(projectFolderName) {
+    if (!(await pathExists(STARTER_ROOT))) {
+        throw new Error("Starter project not found.");
     }
-
-    return templatePath;
-}
-
-/**
- * Copies the selected template into Generator/generated.
- *
- * @param {string} templateName
- * @param {string} projectFolderName
- *
- * @returns {Promise<Object>}
- */
-async function copyTemplate(templateName, projectFolderName) {
-    const templatePath = await validateTemplate(templateName);
 
     await ensureDirectoryExists(GENERATED_ROOT);
 
-    const generatedProjectPath =
-        getGeneratedProjectPath(projectFolderName);
-
-    await copyDirectory(
-        templatePath,
-        generatedProjectPath
+    const destination = path.join(
+        GENERATED_ROOT,
+        projectFolderName
     );
 
-    return {
-        templateName,
-        templatePath,
+    await copyDirectory(STARTER_ROOT, destination);
+
+    return destination;
+}
+
+/**
+ * Copies only the selected template into the generated project.
+ *
+ * @param {string} generatedProjectPath
+ * @param {string} templateName
+ */
+async function setupSelectedTemplate(
+    generatedProjectPath,
+    templateName
+) {
+    const starterTemplates = path.join(
+        STARTER_ROOT,
+        "src",
+        "templates"
+    );
+
+    const generatedTemplates = path.join(
         generatedProjectPath,
+        "src",
+        "templates"
+    );
+
+    const templateMap = {
+        minimal: "MinimalTemplate.jsx",
+        modern: "ModernTemplate.jsx",
+        professional: "ProfessionalTemplate.jsx",
+    };
+
+    const selectedTemplate = templateMap[
+        templateName.toLowerCase()
+    ];
+
+    if (!selectedTemplate) {
+        throw new Error(`Invalid template: ${templateName}`);
+    }
+
+    // Remove all templates
+    const files = await fs.readdir(generatedTemplates);
+
+    for (const file of files) {
+        await fs.remove(path.join(generatedTemplates, file));
+    }
+
+    // Copy only selected template
+    await fs.copy(
+        path.join(starterTemplates, selectedTemplate),
+        path.join(generatedTemplates, selectedTemplate)
+    );
+
+    return selectedTemplate;
+}
+
+/**
+ * Creates a standalone portfolio project.
+ *
+ * @param {string} templateName
+ * @param {string} projectFolderName
+ */
+async function prepareProject(
+    templateName,
+    projectFolderName
+) {
+    const generatedProjectPath =
+        await copyStarter(projectFolderName);
+
+    const selectedTemplate =
+        await setupSelectedTemplate(
+            generatedProjectPath,
+            templateName
+        );
+
+    return {
+        generatedProjectPath,
+        selectedTemplate,
     };
 }
 
 module.exports = {
-    copyTemplate,
-    validateTemplate,
-    getTemplatePath,
-    getGeneratedProjectPath,
+    copyStarter,
+    setupSelectedTemplate,
+    prepareProject,
 };

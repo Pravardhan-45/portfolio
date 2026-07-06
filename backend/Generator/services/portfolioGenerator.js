@@ -1,77 +1,62 @@
-const path = require("path");
-const {
-    pathExists,
-    copyDirectory,
-    ensureDirectoryExists,
-    joinPath,
-} = require("../utils/fileUtils");
+const { prepareProject } = require("./templateService");
+const { injectPortfolioData } = require("./dataInjector");
 
 /**
- * Copies the selected template into the generated folder.
+ * Generates a standalone portfolio project.
  *
- * @param {string} templateName
- * @param {string} projectFolderName
- * @returns {Promise<string>} Generated project path
- */
-async function copyTemplate(templateName, projectFolderName) {
-    // Path to frontend templates
-    const templatesRoot = path.resolve(
-        __dirname,
-        "../../../frontend/templates"
-    );
-
-    // Source template path
-    const templatePath = joinPath(templatesRoot, templateName);
-
-    // Check template exists
-    if (!(await pathExists(templatePath))) {
-        throw new Error(`Template "${templateName}" does not exist.`);
-    }
-
-    // Generator/generated
-    const generatedRoot = path.resolve(
-        __dirname,
-        "../generated"
-    );
-
-    // Ensure generated folder exists
-    await ensureDirectoryExists(generatedRoot);
-
-    // Destination folder
-    const destinationPath = joinPath(
-        generatedRoot,
-        projectFolderName
-    );
-
-    // Copy template
-    await copyDirectory(templatePath, destinationPath);
-
-    return destinationPath;
-}
-
-/**
- * Returns all available templates.
+ * Workflow:
+ * 1. Copy starter project.
+ * 2. Keep only selected template.
+ * 3. Generate portfolio.js with user data.
  *
- * Useful for validation or future APIs.
+ * @param {Object} options
+ * @param {string} options.templateName
+ * @param {Object} options.portfolioData
+ * @param {string} options.projectFolderName
+ *
+ * @returns {Promise<Object>}
  */
-async function getAvailableTemplates() {
-    const fs = require("fs-extra");
+async function generatePortfolio({
+    templateName,
+    portfolioData,
+    projectFolderName,
+}) {
+    try {
+        // Copy starter and setup selected template
+        const {
+            generatedProjectPath,
+            selectedTemplate,
+        } = await prepareProject(
+            templateName,
+            projectFolderName
+        );
 
-    const templatesRoot = path.resolve(
-        __dirname,
-        "../../../frontend/templates"
-    );
+        // Make sure template is also stored in portfolio data
+        portfolioData.template = templateName.toLowerCase();
 
-    if (!(await fs.pathExists(templatesRoot))) {
-        return [];
+        // Generate src/data/portfolio.js
+        const portfolioFile =
+            await injectPortfolioData(
+                generatedProjectPath,
+                portfolioData
+            );
+
+        return {
+            success: true,
+            generatedProjectPath,
+            selectedTemplate,
+            portfolioFile,
+        };
+    } catch (error) {
+        console.error(
+            "Portfolio generation failed:",
+            error
+        );
+
+        throw error;
     }
-
-    const files = await fs.readdir(templatesRoot);
-
-    return files;
 }
 
 module.exports = {
-    copyTemplate,
-    getAvailableTemplates,
+    generatePortfolio,
 };

@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 const {
@@ -6,9 +7,15 @@ const {
 } = require("../controllers/downloadController");
 
 /**
- * Download Portfolio Source Code (ZIP)
+ * Generate and download standalone portfolio
  *
  * POST /api/download
+ *
+ * Request Body:
+ * {
+ *   "template": "modern",
+ *   "portfolio": { ... }
+ * }
  */
 router.post("/", downloadPortfolio);
 
