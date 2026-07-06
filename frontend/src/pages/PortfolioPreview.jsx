@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import axios from 'axios';
-import { usePortfolio } from '../context/PortfolioContext';
+import { useLocation } from 'react-router-dom';
+import { usePortfolio, PortfolioContext } from '../context/PortfolioContext';
 import MinimalTemplate from '../templates/MinimalTemplate';
 import ModernTemplate from '../templates/ModernTemplate';
 import ProfessionalTemplate from '../templates/ProfessionalTemplate';
 
 const PortfolioPreview = () => {
+  const originalContextData = usePortfolio();
   const { 
     personalInfo, 
     aboutMe, 
@@ -14,13 +16,65 @@ const PortfolioPreview = () => {
     experience, 
     projects, 
     education 
-  } = usePortfolio();
+  } = originalContextData;
+
+  const location = useLocation();
+  const suggestions = location.state?.suggestions;
+
+  const mergedData = useMemo(() => {
+    if (!suggestions) return null;
+    
+    // Safely parse AI array suggestions
+    const parseArray = (data) => {
+      if (Array.isArray(data)) return data.map(i => typeof i === 'string' ? i : JSON.stringify(i));
+      if (typeof data === 'string') return data.split(',').map(s => s.trim()).filter(Boolean);
+      return [];
+    };
+
+    // Extract a smart project title from an AI project description sentence
+    const extractProjectTitle = (description) => {
+      // Try to detect key action words and build a meaningful title
+      const lower = description.toLowerCase();
+      if (lower.includes('restful') || lower.includes('rest api')) return 'RESTful API Service';
+      if (lower.includes('e-commerce') || lower.includes('ecommerce')) return 'E-Commerce Platform';
+      if (lower.includes('authentication') || lower.includes('oauth')) return 'Secure Auth System';
+      if (lower.includes('dashboard') || lower.includes('analytics')) return 'Analytics Dashboard';
+      if (lower.includes('mobile') || lower.includes('app')) return 'Mobile Application';
+      if (lower.includes('machine learning') || lower.includes('ml') || lower.includes('ai')) return 'ML / AI Project';
+      if (lower.includes('chat') || lower.includes('real-time') || lower.includes('realtime')) return 'Real-Time Chat App';
+      if (lower.includes('database') || lower.includes('sql') || lower.includes('redis')) return 'Data-Intensive Application';
+      if (lower.includes('microservice')) return 'Microservices Architecture';
+      if (lower.includes('frontend') || lower.includes('ui') || lower.includes('angular') || lower.includes('react')) return 'Responsive Web Application';
+      // Fallback: take first 5 words and turn them into a title
+      const words = description.split(' ').slice(0, 4).join(' ');
+      return words.charAt(0).toUpperCase() + words.slice(1);
+    };
+
+    const aiHighlightSkills = parseArray(suggestions.highlightSkills);
+    const aiMissingSkills = parseArray(suggestions.missingSkills).map(s => `${s} (Learning)`);
+    const allSkills = [...new Set([...skills, ...aiHighlightSkills])];
+
+    const aiProjects = parseArray(suggestions.recommendedProjects).map((p, idx) => ({
+      title: extractProjectTitle(p),
+      description: p,
+      technologies: allSkills.slice(idx % 2, (idx % 2) + 3).join(', ') || aiHighlightSkills.slice(0, 3).join(', ')
+    }));
+
+    return {
+      ...originalContextData,
+      aboutMe: typeof suggestions.generatedSummary === 'string' 
+        ? suggestions.generatedSummary 
+        : (suggestions.generatedSummary ? JSON.stringify(suggestions.generatedSummary) : aboutMe),
+      skills: [...new Set([...skills, ...aiHighlightSkills, ...aiMissingSkills])],
+      projects: [...projects, ...aiProjects]
+    };
+  }, [suggestions, originalContextData]);
+
+  const activeData = mergedData || originalContextData;
 
   const [downloading, setDownloading] = useState(false);
-  // By default hum 'professional' template dikhayenge
   const [selectedTemplate, setSelectedTemplate] = useState('professional');
 
-  // Yeh function decide karega ki konsa template render karna hai
   const renderTemplate = () => {
     switch (selectedTemplate) {
       case 'minimal':
@@ -40,13 +94,13 @@ const PortfolioPreview = () => {
       const payload = {
         template: selectedTemplate,
         portfolio: {
-          personalInfo,
-          aboutMe,
-          socialLinks,
-          skills,
-          experience,
-          projects,
-          education
+          personalInfo: activeData.personalInfo,
+          aboutMe: activeData.aboutMe,
+          socialLinks: activeData.socialLinks,
+          skills: activeData.skills,
+          experience: activeData.experience,
+          projects: activeData.projects,
+          education: activeData.education
         }
       };
 
@@ -75,7 +129,14 @@ const PortfolioPreview = () => {
       
       {/* --- Top Control Bar (Fixed) --- */}
       <div className="bg-white shadow-md p-4 flex flex-col sm:flex-row justify-between items-center z-50 sticky top-0">
-        <h2 className="text-xl font-bold text-slate-800 mb-4 sm:mb-0">Live Portfolio Preview</h2>
+        <div className="flex flex-col sm:flex-row items-center gap-3 mb-4 sm:mb-0">
+          <h2 className="text-xl font-bold text-slate-800">Live Portfolio Preview</h2>
+          {mergedData && (
+            <span className="px-3 py-1 bg-emerald-100 text-emerald-800 text-sm font-bold rounded-full shadow-sm border border-emerald-200 flex items-center gap-1.5">
+              <span>✨</span> AI-Optimized
+            </span>
+          )}
+        </div>
         
         <div className="flex items-center gap-4">
           <label htmlFor="template-select" className="font-medium text-slate-600">
@@ -104,8 +165,13 @@ const PortfolioPreview = () => {
 
       {/* --- Template Display Area --- */}
       <div className="flex-grow overflow-auto shadow-inner">
-        {/* Yahan par selected template render hoga */}
-        {renderTemplate()}
+        {mergedData ? (
+          <PortfolioContext.Provider value={mergedData}>
+            {renderTemplate()}
+          </PortfolioContext.Provider>
+        ) : (
+          renderTemplate()
+        )}
       </div>
 
     </div>
