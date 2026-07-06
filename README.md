@@ -8,7 +8,8 @@ A web application that enables users to create professional portfolio websites w
 - **State Management**: Implemented centralized React context for Personal Info, About Me, Education, Skills, Projects, Experience, and Social Links.
 - **Dynamic Forms**: Created intuitive forms with "Add Another" functionality for dynamic lists like Education and Projects.
 - **Premium Aesthetics**: Designed a professional, gradient-styled landing page UI with a sticky "Save & Continue" action bar.
-- **Image Processing**: Handled profile image uploads and automatic Base64 conversion for seamless JSON storage.
+- **Image Processing**: Handled profile image uploads (`.jpg`, `.jpeg`, `.png`) with automatic Base64 conversion for seamless JSON storage.
+- **Calendar Integration**: Added month/year date pickers for Education start and end dates.
 
 ### Member 2: Portfolio Templates & Live Preview
 - **Multiple Themes**: Designed and developed three distinct, fully responsive portfolio templates (Minimal, Modern, and Professional) using React and Tailwind CSS.
@@ -29,13 +30,19 @@ A web application that enables users to create professional portfolio websites w
 ### Member 5: AI Job Analysis Integration
 - **Job Description Upload**: Built a dedicated professional UI (`/jd-upload`) to upload Job Descriptions as PDFs.
 - **PDF Extraction**: Utilized `multer` and `pdf-parse` to securely process and extract text from uploaded documents.
-- **Gemini AI Integration**: Created a secure backend endpoint (`/api/ai/analyze`) that feeds portfolio data and JD text into Google's Gemini 2.5 AI.
-- **Smart Suggestions**: Generated tailored summaries, highlighted matching skills, and identified missing skills.
-- **Crash Protection**: Implemented ultra-safe React rendering wrappers (`safeString`) to guarantee the AI output never crashes the UI.
+- **Gemini AI Integration**: Created a secure backend endpoint (`/api/ai/analyze`) that feeds portfolio data and JD text into Google's Gemini 2.5 Flash AI.
+- **Smart Suggestions**: Generated tailored first-person summaries, highlighted matching skills, identified missing skills, and recommended relevant projects.
+- **AI-Optimized Portfolio Preview**: After AI analysis, the user can click "Preview AI-Optimized Portfolio" which intelligently merges:
+  - Personal details, photo, education, and experience kept intact from the original.
+  - AI's first-person `generatedSummary` replaces the About Me section.
+  - AI's `highlightSkills` combined with original skills; `missingSkills` added as `(Learning)`.
+  - AI's `recommendedProjects` appended with smart, descriptive titles.
+- **Optimized ZIP Download**: When downloading from the AI-Optimized preview, the ZIP contains the fully merged AI-optimized data.
+- **Crash Protection**: Implemented `safeString` parser to guarantee the UI never crashes from unexpected AI output formats.
 
 ## Tech Stack
 - **Frontend**: React, Vite, Tailwind CSS, React Router, Axios.
-- **Backend**: Node.js, Express, Google Gen AI SDK, CORS, Multer, PDF-Parse.
+- **Backend**: Node.js, Express, Google Gen AI SDK (Gemini 2.5 Flash), CORS, Multer, PDF-Parse, Mongoose.
 
 ## How to Run Locally
 
@@ -56,3 +63,12 @@ npm install
 npm run dev
 ```
 Open your browser to `http://localhost:5173` to interact with the application.
+
+## Key Pages
+| Route | Description |
+|---|---|
+| `/` | Login Page |
+| `/register` | Register Page |
+| `/info` | Fill in Portfolio Details |
+| `/jd-upload` | Upload JD & Get AI Suggestions |
+| `/preview` | Live Portfolio Preview (Normal or AI-Optimized) |
