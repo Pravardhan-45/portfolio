@@ -2,29 +2,21 @@ const fs = require("fs-extra");
 const path = require("path");
 
 /**
- * Creates a directory if it doesn't already exist.
- *
- * @param {string} dirPath
+ * Ensures a directory exists.
  */
 async function ensureDirectoryExists(dirPath) {
     await fs.ensureDir(dirPath);
 }
 
 /**
- * Checks whether a file or directory exists.
- *
- * @param {string} targetPath
- * @returns {Promise<boolean>}
+ * Checks if a file/folder exists.
  */
 async function pathExists(targetPath) {
-    return await fs.pathExists(targetPath);
+    return fs.pathExists(targetPath);
 }
 
 /**
- * Copies an entire directory.
- *
- * @param {string} source
- * @param {string} destination
+ * Copies a directory.
  */
 async function copyDirectory(source, destination) {
     await fs.copy(source, destination, {
@@ -34,9 +26,16 @@ async function copyDirectory(source, destination) {
 }
 
 /**
- * Deletes a directory and all its contents.
- *
- * @param {string} dirPath
+ * Copies a file.
+ */
+async function copyFile(source, destination) {
+    await fs.copy(source, destination, {
+        overwrite: true,
+    });
+}
+
+/**
+ * Deletes a directory.
  */
 async function deleteDirectory(dirPath) {
     if (await fs.pathExists(dirPath)) {
@@ -45,20 +44,23 @@ async function deleteDirectory(dirPath) {
 }
 
 /**
- * Reads a JSON file.
- *
- * @param {string} filePath
- * @returns {Promise<Object>}
+ * Deletes a file.
  */
-async function readJSON(filePath) {
-    return await fs.readJson(filePath);
+async function deleteFile(filePath) {
+    if (await fs.pathExists(filePath)) {
+        await fs.remove(filePath);
+    }
 }
 
 /**
- * Writes data to a JSON file with formatting.
- *
- * @param {string} filePath
- * @param {Object} data
+ * Reads JSON.
+ */
+async function readJSON(filePath) {
+    return fs.readJson(filePath);
+}
+
+/**
+ * Writes JSON.
  */
 async function writeJSON(filePath, data) {
     await fs.writeJson(filePath, data, {
@@ -67,30 +69,28 @@ async function writeJSON(filePath, data) {
 }
 
 /**
- * Reads a text file.
- *
- * @param {string} filePath
- * @returns {Promise<string>}
+ * Reads text file.
  */
 async function readFile(filePath) {
-    return await fs.readFile(filePath, "utf8");
+    return fs.readFile(filePath, "utf8");
 }
 
 /**
- * Writes text to a file.
- *
- * @param {string} filePath
- * @param {string} content
+ * Writes text file.
  */
 async function writeFile(filePath, content) {
     await fs.writeFile(filePath, content, "utf8");
 }
 
 /**
- * Returns absolute path by joining path segments.
- *
- * @param  {...string} paths
- * @returns {string}
+ * Returns directory listing.
+ */
+async function readDirectory(dirPath) {
+    return fs.readdir(dirPath);
+}
+
+/**
+ * Creates path.
  */
 function joinPath(...paths) {
     return path.join(...paths);
@@ -100,10 +100,13 @@ module.exports = {
     ensureDirectoryExists,
     pathExists,
     copyDirectory,
+    copyFile,
     deleteDirectory,
+    deleteFile,
     readJSON,
     writeJSON,
     readFile,
     writeFile,
+    readDirectory,
     joinPath,
 };

@@ -1,46 +1,78 @@
-const { generatePortfolio } = require("../../Generator/services/portfolioGenerator");
-const { createZip } = require("./zipService");
+const {
+    generatePortfolio,
+} = require("../../Generator/services/portfolioGenerator");
+
+const {
+    generateProjectFolderName,
+} = require("../../Generator/utils/idGenerator");
+
+const {
+    createZip,
+} = require("./zipService");
 
 /**
- * Generates a portfolio project and creates a ZIP archive.
+ * Generates a standalone portfolio and
+ * creates a downloadable ZIP.
  *
  * @param {string} templateName
  * @param {Object} portfolioData
  * @returns {Promise<Object>}
  */
-async function generateDownload(templateName, portfolioData) {
+async function generateDownload(
+    templateName,
+    portfolioData
+) {
     try {
-        // Generate portfolio project
-        const {
-            projectId,
-            generatedPath,
-        } = await generatePortfolio(
-            templateName,
-            portfolioData
-        );
 
-        // Create ZIP archive
+        // Generate unique project folder
+        const projectFolderName =
+            generateProjectFolderName();
+
+        // Generate standalone portfolio
+        const {
+            generatedProjectPath,
+            selectedTemplate,
+            portfolioFile,
+        } = await generatePortfolio({
+            templateName,
+            portfolioData,
+            projectFolderName,
+        });
+
+        // Create ZIP
         const {
             zipName,
             zipPath,
             size,
         } = await createZip(
-            projectId,
-            generatedPath
+            generatedProjectPath
         );
 
         return {
             success: true,
-            projectId,
+
+            generatedProjectPath,
+
+            portfolioFile,
+
+            selectedTemplate,
+
             zipName,
+
             zipPath,
+
             size,
         };
 
     } catch (error) {
-        throw new Error(
-            `Download generation failed: ${error.message}`
+
+        console.error(
+            "Download generation failed:",
+            error
         );
+
+        throw error;
+
     }
 }
 

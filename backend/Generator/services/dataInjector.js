@@ -1,41 +1,47 @@
 const path = require("path");
-const {
-    pathExists,
-    writeJSON,
-} = require("../utils/fileUtils");
+const fs = require("fs-extra");
 
 /**
- * Injects user portfolio data into the generated template.
- *
- * Expected template structure:
- *
- * src/
- *   data/
- *      portfolio.json
+ * Generates src/data/portfolio.js
+ * inside the generated standalone portfolio project.
  *
  * @param {string} generatedProjectPath
  * @param {Object} portfolioData
  * @returns {Promise<string>}
  */
-async function injectPortfolioData(generatedProjectPath, portfolioData) {
-    const portfolioFilePath = path.join(
+async function injectPortfolioData(
+    generatedProjectPath,
+    portfolioData
+) {
+    const dataFolder = path.join(
         generatedProjectPath,
         "src",
-        "data",
-        "portfolio.json"
+        "data"
     );
 
-    // Ensure the template contains portfolio.json
-    if (!(await pathExists(portfolioFilePath))) {
-        throw new Error(
-            `portfolio.json not found at ${portfolioFilePath}`
-        );
-    }
+    await fs.ensureDir(dataFolder);
 
-    // Replace demo data with user's portfolio
-    await writeJSON(portfolioFilePath, portfolioData);
+    const portfolioFile = path.join(
+        dataFolder,
+        "portfolio.js"
+    );
 
-    return portfolioFilePath;
+    const fileContent = `const portfolio = ${JSON.stringify(
+        portfolioData,
+        null,
+        2
+    )};
+
+export default portfolio;
+`;
+
+    await fs.writeFile(
+        portfolioFile,
+        fileContent,
+        "utf8"
+    );
+
+    return portfolioFile;
 }
 
 module.exports = {
