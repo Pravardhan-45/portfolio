@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 
 function Projects() {
@@ -98,6 +98,7 @@ function Projects() {
               <div>
                 <label className="font-semibold">GitHub Repository Link</label>
                 <input
+                  id={`input-project-${index}-github`}
                   type="url"
                   name="githubLink"
                   value={project.githubLink}
@@ -109,6 +110,7 @@ function Projects() {
               <div>
                 <label className="font-semibold">Live Demo Link</label>
                 <input
+                  id={`input-project-${index}-live`}
                   type="url"
                   name="liveLink"
                   value={project.liveLink}

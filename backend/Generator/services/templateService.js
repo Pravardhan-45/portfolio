@@ -72,19 +72,9 @@ async function setupSelectedTemplate(
         throw new Error(`Invalid template: ${templateName}`);
     }
 
-    // Remove all templates
-    const files = await fs.readdir(generatedTemplates);
-
-    for (const file of files) {
-        await fs.remove(path.join(generatedTemplates, file));
-    }
-
-    // Copy only selected template
-    await fs.copy(
-        path.join(starterTemplates, selectedTemplate),
-        path.join(generatedTemplates, selectedTemplate)
-    );
-
+    // Keep all templates in the generated project to prevent App.jsx from breaking
+    // due to missing imports. App.jsx will dynamically render the selectedTemplate.
+    
     return selectedTemplate;
 }
 

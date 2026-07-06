@@ -15,6 +15,7 @@ function SocialLinks() {
         <div>
           <label className="font-semibold">GitHub</label>
           <input
+            id="input-github"
             type="url"
             name="github"
             value={socialLinks.github}
@@ -26,6 +27,7 @@ function SocialLinks() {
         <div>
           <label className="font-semibold">LinkedIn</label>
           <input
+            id="input-linkedin"
             type="url"
             name="linkedin"
             value={socialLinks.linkedin}
@@ -37,6 +39,7 @@ function SocialLinks() {
         <div>
           <label className="font-semibold">Portfolio</label>
           <input
+            id="input-portfolio"
             type="url"
             name="portfolio"
             value={socialLinks.portfolio}
@@ -48,6 +51,7 @@ function SocialLinks() {
         <div>
           <label className="font-semibold">Twitter (Optional)</label>
           <input
+            id="input-twitter"
             type="url"
             name="twitter"
             value={socialLinks.twitter}

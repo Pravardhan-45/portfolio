@@ -15,6 +15,7 @@ function PersonalInfo() {
         <div>
           <label className="font-semibold">Full Name</label>
           <input
+            id="input-fullName"
             type="text"
             name="fullName"
             value={personalInfo.fullName}
@@ -26,6 +27,7 @@ function PersonalInfo() {
         <div>
           <label className="font-semibold">Email</label>
           <input
+            id="input-email"
             type="email"
             name="email"
             value={personalInfo.email}
@@ -37,6 +39,7 @@ function PersonalInfo() {
         <div>
           <label className="font-semibold">Phone Number</label>
           <input
+            id="input-phone"
             type="tel"
             name="phone"
             value={personalInfo.phone}
@@ -57,13 +60,34 @@ function PersonalInfo() {
           />
         </div>
         <div className="md:col-span-2">
-          <label className="font-semibold">Profile Image</label>
-          <input
-            type="file"
-            name="profilePhoto"
-            onChange={(e) => setPersonalInfo({ ...personalInfo, profilePhoto: e.target.files?.[0] || null })}
-            className="w-full border rounded-lg p-3 mt-2"
-          />
+          <label className="font-semibold">Profile Image (.jpg, .jpeg, .png)</label>
+          <div className="mt-2 flex items-center gap-4">
+            {personalInfo.profilePhoto && (
+              <img 
+                src={personalInfo.profilePhoto} 
+                alt="Profile Preview" 
+                className="w-16 h-16 rounded-full object-cover border-2 border-blue-100 shadow-sm"
+              />
+            )}
+            <input
+              type="file"
+              name="profilePhoto"
+              accept=".jpg,.jpeg,.png,.webp"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setPersonalInfo({ ...personalInfo, profilePhoto: reader.result });
+                  };
+                  reader.readAsDataURL(file);
+                } else {
+                  setPersonalInfo({ ...personalInfo, profilePhoto: null });
+                }
+              }}
+              className="w-full border rounded-lg p-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all"
+            />
+          </div>
         </div>
       </div>
     </div>

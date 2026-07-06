@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { usePortfolio } from '../context/PortfolioContext';
 import MinimalTemplate from '../templates/MinimalTemplate';
 import ModernTemplate from '../templates/ModernTemplate';
 import ProfessionalTemplate from '../templates/ProfessionalTemplate';
 
 const PortfolioPreview = () => {
+  const { 
+    personalInfo, 
+    aboutMe, 
+    socialLinks, 
+    skills, 
+    experience, 
+    projects, 
+    education 
+  } = usePortfolio();
+
+  const [downloading, setDownloading] = useState(false);
   // By default hum 'professional' template dikhayenge
   const [selectedTemplate, setSelectedTemplate] = useState('professional');
 
@@ -18,6 +31,42 @@ const PortfolioPreview = () => {
         return <ProfessionalTemplate />;
       default:
         return <ProfessionalTemplate />;
+    }
+  };
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      const payload = {
+        template: selectedTemplate,
+        portfolio: {
+          personalInfo,
+          aboutMe,
+          socialLinks,
+          skills,
+          experience,
+          projects,
+          education
+        }
+      };
+
+      const response = await axios.post('/api/download', payload, {
+        responseType: 'blob'
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `portfolio-${selectedTemplate}.zip`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download portfolio. Please try again.');
+    } finally {
+      setDownloading(false);
     }
   };
 
@@ -43,9 +92,12 @@ const PortfolioPreview = () => {
             <option value="professional">Professional Theme</option>
           </select>
           
-          {/* Download Button (Aapke next task ke liye placeholder) */}
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition shadow-sm">
-            Download ZIP
+          <button 
+            onClick={handleDownload}
+            disabled={downloading}
+            className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg font-medium transition shadow-sm"
+          >
+            {downloading ? 'Generating ZIP...' : 'Download ZIP'}
           </button>
         </div>
       </div>

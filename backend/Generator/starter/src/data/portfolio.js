@@ -1,4 +1,4 @@
-const portfolio = {
+const defaultPortfolio = {
   template: "minimal",
 
   personalInfo: {
@@ -21,41 +21,15 @@ const portfolio = {
 
   skills: [],
 
-  experience: [
-    /*
-    {
-      role: "",
-      company: "",
-      duration: "",
-      description: ""
-    }
-    */
-  ],
+  experience: [],
 
-  projects: [
-    /*
-    {
-      title: "",
-      description: "",
-      techStack: [],
-      link: ""
-    }
-    */
-  ],
+  projects: [],
 
-  education: [
-    /*
-    {
-      degree: "",
-      institution: "",
-      year: ""
-    }
-    */
-  ],
+  education: [],
 
   certifications: [],
 
   achievements: []
 };
 
-export default portfolio;
+export default defaultPortfolio;
