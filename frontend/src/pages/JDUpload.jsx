@@ -172,10 +172,10 @@ function JDUpload() {
             </div>
             
             <button
-              onClick={() => navigate('/preview')}
+              onClick={() => navigate('/preview', { state: { suggestions } })}
               className="w-full mt-8 bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-slate-800 shadow-xl shadow-slate-900/20 transition-all flex items-center justify-center gap-3 text-lg"
             >
-              Preview & Download Portfolio
+              Preview AI-Optimized Portfolio
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
           </div>
