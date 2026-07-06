@@ -2,55 +2,57 @@
 
 A web application that enables users to create professional portfolio websites with minimal effort, featuring AI-based job description customization.
 
-## Features Developed So Far
+## Team Contributions
 
-### 1. User Information Form (Member 1)
-- React context state management for Personal Information, About Me, Education, Skills, Projects, Experience, Certifications, Achievements, and Social Links.
-- Updated form order and layout to match the new portfolio input flow.
-- Dynamic "Add Another" functionality for Education and Projects, allowing users to add multiple entries responsively.
-- Interactive form fields linked to centralized global state.
-- "Save & Continue" functionality to seamlessly transition to the AI analysis phase.
+### Member 1: User Information Form & UI
+- **State Management**: Implemented centralized React context for Personal Info, About Me, Education, Skills, Projects, Experience, and Social Links.
+- **Dynamic Forms**: Created intuitive forms with "Add Another" functionality for dynamic lists like Education and Projects.
+- **Premium Aesthetics**: Designed a professional, gradient-styled landing page UI with a sticky "Save & Continue" action bar.
+- **Image Processing**: Handled profile image uploads and automatic Base64 conversion for seamless JSON storage.
 
-### 2. AI Job Analysis Integration (Member 5)
-- **Job Description Upload**: Dedicated page to upload a Job Description as a PDF (`/jd-upload`).
-- **PDF Extraction**: Utilizes `multer` and `pdf-parse` (v1.1.1) to securely process and extract text from the uploaded PDF documents.
-- **Gemini AI Integration**: A secure backend endpoint (`/api/ai/analyze`) that feeds the user's current portfolio data and the extracted JD text into Google's Gemini AI.
-- **Customized Portfolio Suggestions**: Extracts highlight skills, identifies missing skills, generates a professional summary, and recommends relevant projects to emphasize.
+### Member 2: Portfolio Templates & Live Preview
+- **Multiple Themes**: Designed and developed three distinct, fully responsive portfolio templates (Minimal, Modern, and Professional) using React and Tailwind CSS.
+- **Dynamic Integration**: Connected the templates with the centralized state to dynamically render user details and profile photos.
+- **Live Preview Feature**: Implemented a dedicated preview interface (`/preview` route) with a theme switcher for instant visualization.
+- **Responsive Layouts**: Ensured a seamless, mobile-first design across all templates using Tailwind grid and flexbox.
 
-### 3. Dashboard Hub
-- A centralized dashboard linking out to the completed member features, with placeholders for future member tasks (Templates, Database Sync, and Source Download).
+### Member 3: User Authentication & Security
+- **Authentication Flow**: Implemented Login and Registration pages (`login.jsx`, `Register.jsx`).
+- **API Integration**: Developed secure authentication API endpoints (`authApi.js`) to manage user sessions.
+- **Protected Routes**: Ensured that user portfolio data is securely saved and retrieved based on authenticated user sessions.
 
-### 4. Portfolio Templates & Live Preview (Member 2)
+### Member 4: Standalone Project Generator & ZIP Export
+- **Dynamic Generation**: Developed the backend logic (`templateService.js`) to dynamically inject user JSON data into a standalone starter project.
+- **Static Template Syncing**: Synchronized frontend templates to function independently in the downloaded project without relying on React Context.
+- **ZIP Packaging**: Created the automated zipping process allowing users to download their entire React portfolio as a ready-to-run package (`npm install` & `npm run dev`).
 
-* **Multiple Themes:** Designed and developed three distinct, fully responsive portfolio templates (Minimal, Modern, and Professional) using React and Tailwind CSS.
-* **Dynamic Data Integration:** Connected the templates with the centralized `PortfolioContext` to dynamically render user details (Personal Info, Skills, Projects, Education, etc.).
-* **Live Preview Feature:** Implemented a dedicated preview interface (`/preview` route) with a theme switcher, allowing users to instantly see how their data looks across different templates.
-* **Responsive Layouts:** Ensured a seamless, mobile-first design across all templates using Tailwind grid and flexbox, completely eliminating the need for external CSS files.
-
+### Member 5: AI Job Analysis Integration
+- **Job Description Upload**: Built a dedicated professional UI (`/jd-upload`) to upload Job Descriptions as PDFs.
+- **PDF Extraction**: Utilized `multer` and `pdf-parse` to securely process and extract text from uploaded documents.
+- **Gemini AI Integration**: Created a secure backend endpoint (`/api/ai/analyze`) that feeds portfolio data and JD text into Google's Gemini 2.5 AI.
+- **Smart Suggestions**: Generated tailored summaries, highlighted matching skills, and identified missing skills.
+- **Crash Protection**: Implemented ultra-safe React rendering wrappers (`safeString`) to guarantee the AI output never crashes the UI.
 
 ## Tech Stack
-- **Frontend**: React, Vite, TailwindCSS (setup pending), React Router, Axios.
-- **Backend**: Node.js, Express, Google Gen AI SDK, CORS.
+- **Frontend**: React, Vite, Tailwind CSS, React Router, Axios.
+- **Backend**: Node.js, Express, Google Gen AI SDK, CORS, Multer, PDF-Parse.
 
-## How to Run the Application Locally
+## How to Run Locally
 
 You will need two terminals running simultaneously.
 
 ### 1. Start the Backend Server (Port 5000)
-Navigate to the AI Integration directory and start the Node server:
-\`\`\`bash
-cd backend/AI-Integration
+```bash
+cd backend
 npm install
 node server.js
-\`\`\`
-*(Ensure you have a `.env` file in the `backend/AI-Integration` directory containing your `GEMINI_API_KEY=your_key`)*
+```
+*(Ensure you have a `.env` file in the `backend` directory containing your `GEMINI_API_KEY=your_key`)*
 
 ### 2. Start the Frontend Server (Port 5173)
-Navigate to the frontend directory and start the Vite development server:
-\`\`\`bash
+```bash
 cd frontend
 npm install
 npm run dev
-\`\`\`
-
+```
 Open your browser to `http://localhost:5173` to interact with the application.
