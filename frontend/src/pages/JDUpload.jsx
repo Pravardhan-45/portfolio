@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../context/PortfolioContext';
 import axios from 'axios';
+import TopNav from '../components/TopNav';
 
 function JDUpload() {
   const { personalInfo, skills, projects, experience, education, achievements, certifications } = usePortfolio();
@@ -63,9 +64,11 @@ function JDUpload() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-16 px-6 font-sans">
-      <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
+    <div className="min-h-screen bg-slate-50 font-sans">
+      <TopNav />
+      <div className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header Section */}
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
             AI Portfolio Analyzer
@@ -183,6 +186,7 @@ function JDUpload() {
             </button>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

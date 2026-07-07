@@ -41,7 +41,7 @@ function Register() {
       });
       // Registration successful. We don't auto-login.
       // Redirect to login page to force the user to login.
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       const message =
         err.response?.data?.message ||
@@ -53,10 +53,18 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-blue-100">
+    <div className="min-h-screen flex items-center justify-center bg-blue-100 relative">
+      {/* Back to Home Button */}
+      <Link 
+        to="/" 
+        className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-all bg-white px-5 py-2.5 rounded-full shadow-sm hover:shadow-md"
+      >
+        <span>←</span> Back to Home
+      </Link>
+
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-xl p-8 w-96"
+        className="bg-white shadow-lg rounded-xl p-8 w-96 relative z-10"
       >
         <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">
           Create Account
@@ -106,7 +114,7 @@ function Register() {
 
         <p className="text-center mt-5">
           Already have an account?{" "}
-          <Link to="/" className="text-blue-600 font-semibold">
+          <Link to="/login" className="text-blue-600 font-semibold">
             Login
           </Link>
         </p>

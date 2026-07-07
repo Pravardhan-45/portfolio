@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { usePortfolio } from "../context/PortfolioContext";
 import { validatePortfolioForm } from "../utils/validatePortfolioForm";
 import { getPortfolio, savePortfolio } from "../api/portfolioApi";
@@ -12,6 +12,7 @@ import Projects from "../components/Projects";
 import Certifications from "../components/Certifications";
 import Achievements from "../components/Achievements";
 import SocialLinks from "../components/SocialLinks";
+import TopNav from "../components/TopNav";
 
 function UserInformation() {
   const navigate = useNavigate();
@@ -63,7 +64,18 @@ function UserInformation() {
         setAchievements(portfolio.achievements || "");
         setSocialLinks(portfolio.socialLinks || {});
       } catch (err) {
-        if (err.response?.status !== 404 && isMounted) {
+        if (err.response?.status === 404 && isMounted) {
+          // New user without a portfolio. Ensure state is wiped clean so they don't see previous user data.
+          setPersonalInfo({ fullName: '', email: '', phone: '', location: '', profilePhoto: null });
+          setAboutMe('');
+          setEducation([]);
+          setSkills([]);
+          setProjects([]);
+          setExperience([]);
+          setCertifications('');
+          setAchievements('');
+          setSocialLinks({ github: '', linkedin: '', portfolio: '', twitter: '' });
+        } else if (isMounted) {
           setErrors([{ message: "Unable to load your saved portfolio. Please try again." }]);
         }
       } finally {
@@ -143,7 +155,7 @@ function UserInformation() {
         setSocialLinks(data.portfolio.socialLinks || {});
       }
 
-      navigate("/jd-upload");
+      navigate("/choose-flow");
     } catch (err) {
       const message =
         err.response?.data?.message ||
@@ -157,8 +169,9 @@ function UserInformation() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
+      <TopNav />
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white py-16 px-5 mb-10 shadow-lg">
+      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white py-16 px-5 shadow-lg">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 drop-shadow-md">
             Build Your Portfolio
@@ -169,7 +182,16 @@ function UserInformation() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-5 pb-32">
+      <div className="max-w-6xl mx-auto px-5 pb-32 pt-8">
+        {!loadingPortfolio && personalInfo?.fullName && (
+          <div className="mb-8 bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-xl flex items-center gap-3 shadow-sm">
+            <span className="text-2xl">👋</span>
+            <div>
+              <p className="font-semibold text-lg">Welcome back!</p>
+              <p className="text-green-700 text-sm">We've securely loaded your saved portfolio data from your previous session.</p>
+            </div>
+          </div>
+        )}
         {loadingPortfolio && (
           <div className="flex justify-center items-center mb-8">
             <span className="animate-pulse bg-blue-100 text-blue-800 px-6 py-2 rounded-full font-medium shadow-sm">
@@ -235,7 +257,7 @@ function UserInformation() {
                 </svg>
                 Saving...
               </span>
-            ) : "Save & Continue to JD Analysis"}
+            ) : "Save & Continue"}
           </button>
         </div>
       </div>
