@@ -1,5 +1,5 @@
 const createPrompt = require("../prompts/portfolioPrompt");
-const getSuggestions = require("../services/geminiService");
+const getAIProvider = require("../services/aiProviderFactory");
 const pdfParse = require("pdf-parse");
 
 const analyzePortfolio = async (req, res) => {
@@ -36,7 +36,9 @@ const analyzePortfolio = async (req, res) => {
 
         const prompt = createPrompt(portfolio, jdText);
 
-        const response = await getSuggestions(prompt);
+        // Strategy Pattern: get the configured AI provider and call analyze()
+        const aiProvider = getAIProvider();
+        const response = await aiProvider.analyze(prompt);
 
         res.json({
             success: true,

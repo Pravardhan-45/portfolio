@@ -1,6 +1,14 @@
 import { useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 
+const Label = ({ children, required, optional }) => (
+  <label className="font-semibold text-gray-700 text-sm flex items-center gap-1">
+    {children}
+    {required && <span className="text-red-500 font-bold">*</span>}
+    {optional && <span className="text-gray-400 font-normal text-xs">(Optional)</span>}
+  </label>
+);
+
 function Experience() {
   const { experience, setExperience } = usePortfolio();
 
@@ -25,26 +33,24 @@ function Experience() {
     setExperience(updated);
   };
 
-  const addExperience = () => {
-    setExperience([...experience, defaultExperience]);
-  };
-
-  const removeExperience = (index) => {
-    setExperience(experience.filter((_, i) => i !== index));
-  };
+  const addExperience = () => setExperience([...experience, defaultExperience]);
+  const removeExperience = (index) => setExperience(experience.filter((_, i) => i !== index));
 
   return (
     <div className="bg-white shadow-lg rounded-xl p-6 mb-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
         <h2 className="text-2xl font-bold text-blue-700">Experience</h2>
         <button
           type="button"
           onClick={addExperience}
           className="self-start bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
-          Add Another Experience
+          + Add Another Experience
         </button>
       </div>
+      <p className="text-xs text-gray-500 mb-6 flex items-center gap-1 font-medium">
+        <span className="text-blue-500 font-bold">ℹ</span> Optional for Freshers (Leave blank if no experience)
+      </p>
 
       <div className="space-y-8">
         {experience.map((entry, index) => (
@@ -55,66 +61,66 @@ function Experience() {
                 <button
                   type="button"
                   onClick={() => removeExperience(index)}
-                  className="text-red-600 hover:text-red-800"
+                  className="text-red-500 hover:text-red-700 text-sm font-medium"
                 >
-                  Remove
+                  ✕ Remove
                 </button>
               )}
             </div>
             <div className="grid grid-cols-1 gap-6">
               <div>
-                <label className="font-semibold">Company Name</label>
+                <Label>Company Name</Label>
                 <input
                   type="text"
                   name="company"
                   value={entry.company}
                   onChange={(e) => handleChange(index, e)}
                   placeholder="Enter company name"
-                  className="w-full border rounded-lg p-3 mt-2"
+                  className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
               </div>
               <div>
-                <label className="font-semibold">Job Role</label>
+                <Label>Job Role / Title</Label>
                 <input
                   type="text"
                   name="role"
                   value={entry.role}
                   onChange={(e) => handleChange(index, e)}
                   placeholder="Software Developer Intern"
-                  className="w-full border rounded-lg p-3 mt-2"
+                  className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
               </div>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="font-semibold">Start Date</label>
+                  <Label>Start Date</Label>
                   <input
                     type="date"
                     name="startDate"
                     value={entry.startDate}
                     onChange={(e) => handleChange(index, e)}
-                    className="w-full border rounded-lg p-3 mt-2"
+                    className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   />
                 </div>
                 <div>
-                  <label className="font-semibold">End Date</label>
+                  <Label>End Date</Label>
                   <input
                     type="date"
                     name="endDate"
                     value={entry.endDate}
                     onChange={(e) => handleChange(index, e)}
-                    className="w-full border rounded-lg p-3 mt-2"
+                    className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   />
                 </div>
               </div>
               <div>
-                <label className="font-semibold">Responsibilities</label>
+                <Label>Responsibilities / Description</Label>
                 <textarea
                   name="responsibilities"
                   rows="4"
                   value={entry.responsibilities}
                   onChange={(e) => handleChange(index, e)}
-                  placeholder="Describe your work..."
-                  className="w-full border rounded-lg p-3 mt-2"
+                  placeholder="Describe your key responsibilities and achievements..."
+                  className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 ></textarea>
               </div>
             </div>

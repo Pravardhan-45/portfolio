@@ -4,7 +4,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import axios from 'axios';
 
 function JDUpload() {
-  const { personalInfo, skills, projects, experience } = usePortfolio();
+  const { personalInfo, skills, projects, experience, education, achievements, certifications } = usePortfolio();
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,10 @@ function JDUpload() {
         name: personalInfo.fullName || "User",
         skills: skills.map(s => s.name || s),
         projects: projects,
-        experience: experience
+        experience: experience,
+        education: education,
+        achievements: achievements,
+        certifications: certifications
       };
       formData.append('portfolio', JSON.stringify(portfolioData));
 

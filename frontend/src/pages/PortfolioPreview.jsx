@@ -15,7 +15,9 @@ const PortfolioPreview = () => {
     skills, 
     experience, 
     projects, 
-    education 
+    education,
+    achievements,
+    certifications
   } = originalContextData;
 
   const location = useLocation();
@@ -33,7 +35,6 @@ const PortfolioPreview = () => {
 
     // Extract a smart project title from an AI project description sentence
     const extractProjectTitle = (description) => {
-      // Try to detect key action words and build a meaningful title
       const lower = description.toLowerCase();
       if (lower.includes('restful') || lower.includes('rest api')) return 'RESTful API Service';
       if (lower.includes('e-commerce') || lower.includes('ecommerce')) return 'E-Commerce Platform';
@@ -45,28 +46,50 @@ const PortfolioPreview = () => {
       if (lower.includes('database') || lower.includes('sql') || lower.includes('redis')) return 'Data-Intensive Application';
       if (lower.includes('microservice')) return 'Microservices Architecture';
       if (lower.includes('frontend') || lower.includes('ui') || lower.includes('angular') || lower.includes('react')) return 'Responsive Web Application';
-      // Fallback: take first 5 words and turn them into a title
       const words = description.split(' ').slice(0, 4).join(' ');
       return words.charAt(0).toUpperCase() + words.slice(1);
     };
 
     const aiHighlightSkills = parseArray(suggestions.highlightSkills);
     const aiMissingSkills = parseArray(suggestions.missingSkills).map(s => `${s} (Learning)`);
-    const allSkills = [...new Set([...skills, ...aiHighlightSkills])];
 
+    // Filter user's existing projects that have technologies matching highlighted JD skills
+    const jdSkillsLower = aiHighlightSkills.map(s => s.toLowerCase());
+    const relevantUserProjects = projects.filter(proj => {
+      const techStr = (proj.technologies || proj.techStack || '').toLowerCase();
+      const descStr = (proj.description || '').toLowerCase();
+      return jdSkillsLower.some(skill => techStr.includes(skill) || descStr.includes(skill));
+    });
+    // Projects NOT matching JD — still keep them but put them after
+    const otherUserProjects = projects.filter(proj => !relevantUserProjects.includes(proj));
+
+    const allSkills = [...new Set([...skills, ...aiHighlightSkills])];
     const aiProjects = parseArray(suggestions.recommendedProjects).map((p, idx) => ({
       title: extractProjectTitle(p),
       description: p,
       technologies: allSkills.slice(idx % 2, (idx % 2) + 3).join(', ') || aiHighlightSkills.slice(0, 3).join(', ')
     }));
 
+    // Use AI's own judgment on which achievements are relevant to the JD
+    const aiRelevantAchievements = parseArray(suggestions.relevantAchievements);
+    // Join into newline-separated string for templates, or empty if AI found none
+    const finalAchievements = aiRelevantAchievements.length > 0
+      ? aiRelevantAchievements.join('\n')
+      : '';
+
     return {
       ...originalContextData,
       aboutMe: typeof suggestions.generatedSummary === 'string' 
         ? suggestions.generatedSummary 
         : (suggestions.generatedSummary ? JSON.stringify(suggestions.generatedSummary) : aboutMe),
-      skills: [...new Set([...skills, ...aiHighlightSkills, ...aiMissingSkills])],
-      projects: [...projects, ...aiProjects]
+      // Strong JD-matching skills first, then AI highlights, then missing skills to learn
+      skills: [...new Set([...aiHighlightSkills, ...skills, ...aiMissingSkills])],
+      // JD-relevant user projects first, then AI recommended, then remaining original
+      projects: [...relevantUserProjects, ...aiProjects, ...otherUserProjects],
+      // Include filtered achievements
+      achievements: finalAchievements,
+      // Keep certifications intact
+      certifications
     };
   }, [suggestions, originalContextData]);
 
@@ -100,7 +123,9 @@ const PortfolioPreview = () => {
           skills: activeData.skills,
           experience: activeData.experience,
           projects: activeData.projects,
-          education: activeData.education
+          education: activeData.education,
+          achievements: activeData.achievements,
+          certifications: activeData.certifications
         }
       };
 

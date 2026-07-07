@@ -1,6 +1,14 @@
 import { useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 
+const Label = ({ children, required, optional }) => (
+  <label className="font-semibold text-gray-700 text-sm flex items-center gap-1">
+    {children}
+    {required && <span className="text-red-500 font-bold">*</span>}
+    {optional && <span className="text-gray-400 font-normal text-xs">(Optional)</span>}
+  </label>
+);
+
 function Education() {
   const { education, setEducation } = usePortfolio();
 
@@ -26,26 +34,24 @@ function Education() {
     setEducation(updated);
   };
 
-  const addEducation = () => {
-    setEducation([...education, defaultEducation]);
-  };
-
-  const removeEducation = (index) => {
-    setEducation(education.filter((_, i) => i !== index));
-  };
+  const addEducation = () => setEducation([...education, defaultEducation]);
+  const removeEducation = (index) => setEducation(education.filter((_, i) => i !== index));
 
   return (
     <div className="bg-white shadow-lg rounded-xl p-6 mb-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
         <h2 className="text-2xl font-bold text-blue-700">Education</h2>
         <button
           type="button"
           onClick={addEducation}
           className="self-start bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
-          Add Another Education
+          + Add Another Education
         </button>
       </div>
+      <p className="text-xs text-gray-400 mb-6 flex items-center gap-1">
+        <span className="text-red-500 font-bold">*</span> Required fields
+      </p>
 
       <div className="space-y-8">
         {education.map((entry, index) => (
@@ -56,76 +62,76 @@ function Education() {
                 <button
                   type="button"
                   onClick={() => removeEducation(index)}
-                  className="text-red-600 hover:text-red-800"
+                  className="text-red-500 hover:text-red-700 text-sm font-medium"
                 >
-                  Remove
+                  ✕ Remove
                 </button>
               )}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="font-semibold">College / University</label>
+                <Label required>College / University</Label>
                 <input
                   type="text"
                   name="institute"
                   value={entry.institute}
                   onChange={(e) => handleChange(index, e)}
                   placeholder="Enter college name"
-                  className="w-full border rounded-lg p-3 mt-2"
+                  className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
               </div>
               <div>
-                <label className="font-semibold">Degree</label>
+                <Label required>Degree</Label>
                 <input
                   type="text"
                   name="degree"
                   value={entry.degree}
                   onChange={(e) => handleChange(index, e)}
                   placeholder="B.Tech, M.Tech, etc."
-                  className="w-full border rounded-lg p-3 mt-2"
+                  className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
               </div>
               <div>
-                <label className="font-semibold">Branch</label>
+                <Label required>Branch / Specialization</Label>
                 <input
                   type="text"
                   name="branch"
                   value={entry.branch}
                   onChange={(e) => handleChange(index, e)}
                   placeholder="Computer Science"
-                  className="w-full border rounded-lg p-3 mt-2"
+                  className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
               </div>
               <div>
-                <label className="font-semibold">CGPA / Percentage</label>
+                <Label required>CGPA / Percentage</Label>
                 <input
                   type="text"
                   name="grade"
                   value={entry.grade}
                   onChange={(e) => handleChange(index, e)}
-                  placeholder="Enter CGPA"
-                  className="w-full border rounded-lg p-3 mt-2"
+                  placeholder="8.5 / 85%"
+                  className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
               </div>
               <div>
-                <label className="font-semibold">Start Date</label>
+                <Label required>Start Date</Label>
                 <input
                   type="month"
                   name="startYear"
                   value={entry.startYear}
                   onChange={(e) => handleChange(index, e)}
-                  className="w-full border rounded-lg p-3 mt-2"
+                  className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
               </div>
               <div>
-                <label className="font-semibold">End Date (or Expected)</label>
+                <Label required>End Date (or Expected)</Label>
                 <input
                   id={`input-education-${index}-endYear`}
                   type="month"
                   name="endYear"
                   value={entry.endYear}
                   onChange={(e) => handleChange(index, e)}
-                  className="w-full border rounded-lg p-3 mt-2"
+                  className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
               </div>
             </div>

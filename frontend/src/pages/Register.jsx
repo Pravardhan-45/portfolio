@@ -39,8 +39,9 @@ function Register() {
         password,
         confirmPassword,
       });
-      saveAuth({ token: data.token, user: data.user });
-      navigate("/userinfo");
+      // Registration successful. We don't auto-login.
+      // Redirect to login page to force the user to login.
+      navigate("/");
     } catch (err) {
       const message =
         err.response?.data?.message ||

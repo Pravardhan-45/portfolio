@@ -1,7 +1,11 @@
 import React from 'react';
 import portfolioData from '../data/portfolio';
+// Yahan aap apne actual context ka path update kar lijiyega agar alag ho
+ 
 
 const MinimalTemplate = () => {
+  // Context se data fetch kar rahe hain. 
+  // Make sure aapke context mein yehi structure ho ya isko apne according adjust kar lein.
   const { 
     personalInfo, 
     aboutMe, 
@@ -9,7 +13,8 @@ const MinimalTemplate = () => {
     skills, 
     experience, 
     projects, 
-    education 
+    education,
+    achievements
   } = portfolioData;
 
   const data = {
@@ -175,6 +180,21 @@ const MinimalTemplate = () => {
                 </div>
               ))}
             </div>
+          </section>
+        )}
+
+        {/* Achievements — only shown when JD-matching content exists */}
+        {achievements && achievements.trim() && (
+          <section className="mt-8">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-900">Achievements</h2>
+            <ul className="space-y-2">
+              {achievements.split('\n').filter(line => line.trim()).map((item, i) => (
+                <li key={i} className="flex items-start gap-2 text-gray-700 text-sm">
+                  <span className="text-amber-500 font-bold mt-0.5">★</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </section>
         )}
 

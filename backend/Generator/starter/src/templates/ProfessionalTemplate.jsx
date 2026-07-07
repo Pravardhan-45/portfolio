@@ -1,6 +1,7 @@
 import React from 'react';
 import portfolioData from '../data/portfolio';
 
+
 const ProfessionalTemplate = () => {
   const { 
     personalInfo, 
@@ -9,7 +10,8 @@ const ProfessionalTemplate = () => {
     skills, 
     experience, 
     projects, 
-    education 
+    education,
+    achievements
   } = portfolioData;
 
   const data = {
@@ -181,7 +183,7 @@ const ProfessionalTemplate = () => {
 
           {/* Skills */}
           {data.skills && data.skills.length > 0 && (
-            <section>
+            <section className="mb-10">
               <h2 className="text-2xl font-bold text-slate-800 border-b-2 border-slate-200 pb-2 mb-6 uppercase tracking-wider">Technical Skills</h2>
               <div className="flex flex-wrap gap-2">
                 {data.skills.map((skill, index) => (
@@ -190,6 +192,21 @@ const ProfessionalTemplate = () => {
                   </span>
                 ))}
               </div>
+            </section>
+          )}
+
+          {/* Achievements — only shown when JD-matching content exists */}
+          {achievements && achievements.trim() && (
+            <section>
+              <h2 className="text-2xl font-bold text-slate-800 border-b-2 border-slate-200 pb-2 mb-4 uppercase tracking-wider">Achievements</h2>
+              <ul className="space-y-2">
+                {achievements.split('\n').filter(line => line.trim()).map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-neutral-700 text-sm">
+                    <span className="text-amber-500 font-bold mt-0.5">★</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </section>
           )}
 
