@@ -1,5 +1,14 @@
 import { usePortfolio } from '../context/PortfolioContext';
 
+// Reusable label component
+const Label = ({ children, required, optional }) => (
+  <label className="font-semibold text-gray-700 text-sm flex items-center gap-1">
+    {children}
+    {required && <span className="text-red-500 font-bold">*</span>}
+    {optional && <span className="text-gray-400 font-normal text-xs">(Optional)</span>}
+  </label>
+);
+
 function PersonalInfo() {
   const { personalInfo, setPersonalInfo } = usePortfolio();
 
@@ -10,10 +19,13 @@ function PersonalInfo() {
 
   return (
     <div className="bg-white shadow-lg rounded-xl p-6 mb-8">
-      <h2 className="text-2xl font-bold text-blue-700 mb-6">Personal Information</h2>
+      <h2 className="text-2xl font-bold text-blue-700 mb-2">Personal Information</h2>
+      <p className="text-xs text-gray-400 mb-6 flex items-center gap-1">
+        <span className="text-red-500 font-bold">*</span> Required fields
+      </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="font-semibold">Full Name</label>
+          <Label required>Full Name</Label>
           <input
             id="input-fullName"
             type="text"
@@ -21,11 +33,11 @@ function PersonalInfo() {
             value={personalInfo.fullName}
             onChange={handleChange}
             placeholder="Enter your full name"
-            className="w-full border rounded-lg p-3 mt-2"
+            className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
         </div>
         <div>
-          <label className="font-semibold">Email</label>
+          <Label required>Email</Label>
           <input
             id="input-email"
             type="email"
@@ -33,11 +45,11 @@ function PersonalInfo() {
             value={personalInfo.email}
             onChange={handleChange}
             placeholder="Enter your email"
-            className="w-full border rounded-lg p-3 mt-2"
+            className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
         </div>
         <div>
-          <label className="font-semibold">Phone Number</label>
+          <Label required>Phone Number</Label>
           <input
             id="input-phone"
             type="tel"
@@ -45,27 +57,27 @@ function PersonalInfo() {
             value={personalInfo.phone}
             onChange={handleChange}
             placeholder="Enter phone number"
-            className="w-full border rounded-lg p-3 mt-2"
+            className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
         </div>
         <div>
-          <label className="font-semibold">Location</label>
+          <Label required>Location</Label>
           <input
             type="text"
             name="location"
             value={personalInfo.location}
             onChange={handleChange}
-            placeholder="Enter your location"
-            className="w-full border rounded-lg p-3 mt-2"
+            placeholder="City, State"
+            className="w-full border rounded-lg p-3 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
         </div>
         <div className="md:col-span-2">
-          <label className="font-semibold">Profile Image (.jpg, .jpeg, .png)</label>
+          <Label required>Profile Image (.jpg, .jpeg, .png)</Label>
           <div className="mt-2 flex items-center gap-4">
             {personalInfo.profilePhoto && (
-              <img 
-                src={personalInfo.profilePhoto} 
-                alt="Profile Preview" 
+              <img
+                src={personalInfo.profilePhoto}
+                alt="Profile Preview"
                 className="w-16 h-16 rounded-full object-cover border-2 border-blue-100 shadow-sm"
               />
             )}

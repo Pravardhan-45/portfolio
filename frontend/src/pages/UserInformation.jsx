@@ -114,6 +114,9 @@ function UserInformation() {
       socialLinks,
       projects,
       education,
+      experience,
+      skills,
+      certifications,
     });
 
     if (!isValid) {
