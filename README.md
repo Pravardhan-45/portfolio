@@ -54,7 +54,11 @@ cd backend
 npm install
 node server.js
 ```
-*(Ensure you have a `.env` file in the `backend` directory containing your `GEMINI_API_KEY=your_key`)*
+> [!IMPORTANT]  
+> You must create a `.env` file in the `backend` directory containing your environment variables:
+> - `GEMINI_API_KEY=your_gemini_api_key`
+> - `MONGO_URI=mongodb://127.0.0.1:27017/portfolio` (or your MongoDB Atlas connection string)
+> - `JWT_SECRET=your_super_secret_jwt_key`
 
 ### 2. Start the Frontend Server (Port 5173)
 ```bash
@@ -67,8 +71,10 @@ Open your browser to `http://localhost:5173` to interact with the application.
 ## Key Pages
 | Route | Description |
 |---|---|
-| `/` | Login Page |
-| `/register` | Register Page |
-| `/info` | Fill in Portfolio Details |
+| `/` | Landing Page |
+| `/login` | Secure Login |
+| `/register` | User Registration |
+| `/choose-flow` | Dashboard (Choose Direct Download, AI Tailoring, or Edit Form) |
+| `/userinfo` | Update Portfolio Details |
 | `/jd-upload` | Upload JD & Get AI Suggestions |
-| `/preview` | Live Portfolio Preview (Normal or AI-Optimized) |
+| `/preview` | Live Portfolio Preview & Download |
