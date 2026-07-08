@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { usePortfolio } from "../context/PortfolioContext";
+import { useNavGuard } from "../context/NavGuardContext";
 import { validatePortfolioForm } from "../utils/validatePortfolioForm";
 import { getPortfolio, savePortfolio } from "../api/portfolioApi";
 import PersonalInfo from "../components/PersonalInfo";
@@ -14,8 +15,25 @@ import Achievements from "../components/Achievements";
 import SocialLinks from "../components/SocialLinks";
 import TopNav from "../components/TopNav";
 
+// Treat an object whose values are all empty as "no real content" so the
+// auto-seeded blank rows (Education/Projects/Experience) don't count as edits.
+const isEmptyEntry = (obj) =>
+  obj &&
+  typeof obj === "object" &&
+  Object.values(obj).every(
+    (v) => v === null || v === undefined || (typeof v === "string" && v.trim() === "")
+  );
+
+const normalizeForCompare = (payload) => ({
+  ...payload,
+  education: (payload.education || []).filter((e) => !isEmptyEntry(e)),
+  projects: (payload.projects || []).filter((e) => !isEmptyEntry(e)),
+  experience: (payload.experience || []).filter((e) => !isEmptyEntry(e)),
+});
+
 function UserInformation() {
   const navigate = useNavigate();
+  const navGuard = useNavGuard();
   const {
     personalInfo,
     setPersonalInfo,
@@ -39,6 +57,49 @@ function UserInformation() {
   const [errors, setErrors] = useState([]);
   const [loadingPortfolio, setLoadingPortfolio] = useState(false);
   const [savingPortfolio, setSavingPortfolio] = useState(false);
+  const [pendingNav, setPendingNav] = useState(null);
+
+  const [baseline, setBaseline] = useState(null);
+  const isDirtyRef = useRef(false);
+
+  const buildPortfolioPayload = () => ({
+    personalInfo: {
+      ...personalInfo,
+      profilePhoto:
+        typeof personalInfo.profilePhoto === "string"
+          ? personalInfo.profilePhoto
+          : "",
+    },
+    aboutMe,
+    education,
+    skills,
+    projects,
+    experience,
+    certifications,
+    achievements,
+    socialLinks,
+  });
+
+  const buildBaseline = (p) =>
+    JSON.stringify(
+      normalizeForCompare({
+        personalInfo: {
+          ...(p.personalInfo || {}),
+          profilePhoto:
+            typeof p.personalInfo?.profilePhoto === "string"
+              ? p.personalInfo.profilePhoto
+              : "",
+        },
+        aboutMe: p.aboutMe || "",
+        education: p.education || [],
+        skills: p.skills || [],
+        projects: p.projects || [],
+        experience: p.experience || [],
+        certifications: p.certifications || "",
+        achievements: p.achievements || "",
+        socialLinks: p.socialLinks || {},
+      })
+    );
 
   useEffect(() => {
     let isMounted = true;
@@ -63,6 +124,7 @@ function UserInformation() {
         setCertifications(portfolio.certifications || "");
         setAchievements(portfolio.achievements || "");
         setSocialLinks(portfolio.socialLinks || {});
+        setBaseline(buildBaseline(portfolio));
       } catch (err) {
         if (err.response?.status === 404 && isMounted) {
           // New user without a portfolio. Ensure state is wiped clean so they don't see previous user data.
@@ -75,6 +137,7 @@ function UserInformation() {
           setCertifications('');
           setAchievements('');
           setSocialLinks({ github: '', linkedin: '', portfolio: '', twitter: '' });
+          setBaseline(buildBaseline({}));
         } else if (isMounted) {
           setErrors([{ message: "Unable to load your saved portfolio. Please try again." }]);
         }
@@ -102,25 +165,44 @@ function UserInformation() {
     setSocialLinks,
   ]);
 
-  const buildPortfolioPayload = () => ({
-    personalInfo: {
-      ...personalInfo,
-      profilePhoto:
-        typeof personalInfo.profilePhoto === "string"
-          ? personalInfo.profilePhoto
-          : "",
-    },
-    aboutMe,
-    education,
-    skills,
-    projects,
-    experience,
-    certifications,
-    achievements,
-    socialLinks,
-  });
+  // Detect unsaved changes by comparing the current form against the last
+  // loaded/saved snapshot.
+  const isDirty =
+    baseline !== null &&
+    JSON.stringify(normalizeForCompare(buildPortfolioPayload())) !== baseline;
 
-  const handleSave = async () => {
+  useEffect(() => {
+    isDirtyRef.current = isDirty;
+  }, [isDirty]);
+
+  // Warn when leaving the site (tab close / refresh / external URL).
+  useEffect(() => {
+    const handler = (e) => {
+      if (isDirtyRef.current) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, []);
+
+  // Intercept in-app navigation (nav bar links) while there are unsaved changes.
+  useEffect(() => {
+    if (!navGuard) return;
+    navGuard.registerGuard((to) => {
+      if (isDirtyRef.current) {
+        setPendingNav(to);
+        return true;
+      }
+      return false;
+    });
+    return () => {
+      if (navGuard) navGuard.registerGuard(null);
+    };
+  }, [navGuard]);
+
+  const persistPortfolio = async () => {
     const { isValid, errors: validationErrors } = validatePortfolioForm({
       personalInfo,
       socialLinks,
@@ -134,7 +216,7 @@ function UserInformation() {
     if (!isValid) {
       setErrors(validationErrors);
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      return;
+      return false;
     }
 
     setErrors([]);
@@ -144,27 +226,49 @@ function UserInformation() {
       const data = await savePortfolio(buildPortfolioPayload());
 
       if (data.portfolio) {
-        setPersonalInfo(data.portfolio.personalInfo || {});
-        setAboutMe(data.portfolio.aboutMe || "");
-        setEducation(data.portfolio.education || []);
-        setSkills(data.portfolio.skills || []);
-        setProjects(data.portfolio.projects || []);
-        setExperience(data.portfolio.experience || []);
-        setCertifications(data.portfolio.certifications || "");
-        setAchievements(data.portfolio.achievements || "");
-        setSocialLinks(data.portfolio.socialLinks || {});
+        const p = data.portfolio;
+        setPersonalInfo(p.personalInfo || {});
+        setAboutMe(p.aboutMe || "");
+        setEducation(p.education || []);
+        setSkills(p.skills || []);
+        setProjects(p.projects || []);
+        setExperience(p.experience || []);
+        setCertifications(p.certifications || "");
+        setAchievements(p.achievements || "");
+        setSocialLinks(p.socialLinks || {});
+        setBaseline(buildBaseline(p));
       }
 
-      navigate("/choose-flow");
+      return true;
     } catch (err) {
       const message =
         err.response?.data?.message ||
         "Unable to save your portfolio. Please try again.";
       setErrors([{ message }]);
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      return false;
     } finally {
       setSavingPortfolio(false);
     }
+  };
+
+  const handleSave = async () => {
+    const ok = await persistPortfolio();
+    if (ok) navigate("/choose-flow");
+  };
+
+  const handleLeaveWithoutSaving = () => {
+    const to = pendingNav;
+    setPendingNav(null);
+    isDirtyRef.current = false;
+    if (to) navigate(to);
+  };
+
+  const handleSaveAndLeave = async () => {
+    const to = pendingNav;
+    setPendingNav(null);
+    const ok = await persistPortfolio();
+    if (ok && to) navigate(to);
   };
 
   return (
@@ -199,7 +303,7 @@ function UserInformation() {
             </span>
           </div>
         )}
-        
+
         <div className="space-y-8">
           <PersonalInfo />
           <AboutMe />
@@ -242,7 +346,7 @@ function UserInformation() {
       </div>
 
       {/* Sticky Bottom Save Bar */}
-      <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] p-4 z-50">
+      <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] p-4 z-40">
         <div className="max-w-6xl mx-auto flex justify-center md:justify-end">
           <button
             onClick={handleSave}
@@ -261,6 +365,42 @@ function UserInformation() {
           </button>
         </div>
       </div>
+
+      {/* Unsaved-changes confirmation modal */}
+      {pendingNav && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 animate-fade-in-up">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-3xl">⚠️</span>
+              <h3 className="text-xl font-bold text-slate-900">Unsaved changes</h3>
+            </div>
+            <p className="text-slate-600 mb-6">
+              You have unsaved changes to your portfolio. Would you like to save them before leaving this page?
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={handleSaveAndLeave}
+                disabled={savingPortfolio}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50"
+              >
+                {savingPortfolio ? "Saving..." : "Save & Leave"}
+              </button>
+              <button
+                onClick={handleLeaveWithoutSaving}
+                className="w-full bg-white border border-red-200 text-red-600 font-semibold py-3 rounded-lg hover:bg-red-50 transition-colors"
+              >
+                Leave without saving
+              </button>
+              <button
+                onClick={() => setPendingNav(null)}
+                className="w-full text-slate-500 font-medium py-2 hover:text-slate-700 transition-colors"
+              >
+                Stay on this page
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

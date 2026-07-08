@@ -6,7 +6,8 @@ import Register from "./pages/Register";
 import UserInformation from "./pages/UserInformation";
 import JDUpload from "./pages/JDUpload";
 import ChooseFlow from "./pages/ChooseFlow";
-import PortfolioPreview from "./pages/PortfolioPreview"; 
+import PortfolioPreview from "./pages/PortfolioPreview";
+import RequireCompleteForm from "./components/RequireCompleteForm";
 import { isLoggedIn } from "./api/authApi";
 
 const ProtectedRoute = ({ children }) => {
@@ -58,7 +59,9 @@ function App() {
         path="/jd-upload"
         element={
           <ProtectedRoute>
-            <JDUpload />
+            <RequireCompleteForm>
+              <JDUpload />
+            </RequireCompleteForm>
           </ProtectedRoute>
         }
       />
@@ -66,7 +69,9 @@ function App() {
         path="/preview"
         element={
           <ProtectedRoute>
-            <PortfolioPreview />
+            <RequireCompleteForm>
+              <PortfolioPreview />
+            </RequireCompleteForm>
           </ProtectedRoute>
         }
       />

@@ -65,7 +65,7 @@ function ChooseFlow() {
             </p>
             <Link
               to="/jd-upload"
-              className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-md"
+              className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-md"
             >
               Optimize with AI
             </Link>

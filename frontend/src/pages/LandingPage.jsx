@@ -15,7 +15,7 @@ function LandingPage() {
       {/* Navigation Bar */}
       <nav className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
             <span className="text-white font-bold text-xl">P</span>
           </div>
           <span className="text-2xl font-bold text-gray-900 tracking-tight">PortfolioPro</span>
@@ -46,7 +46,7 @@ function LandingPage() {
               </Link>
               <Link
                 to="/register"
-                className="bg-blue-600 text-white px-6 py-2.5 rounded-full font-medium hover:bg-blue-700 transition-all shadow-md hover:shadow-lg"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-medium hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-md"
               >
                 Get Started
               </Link>
@@ -74,7 +74,7 @@ function LandingPage() {
           {loggedIn ? (
             <Link
               to="/choose-flow"
-              className="w-full sm:w-auto px-10 py-4 bg-blue-600 text-white rounded-full font-semibold text-lg hover:bg-blue-700 transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold text-lg hover:-translate-y-0.5 transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-2"
             >
               Go to Dashboard
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,7 +85,7 @@ function LandingPage() {
             <>
               <Link
                 to="/register"
-                className="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white rounded-full font-semibold text-lg hover:bg-gray-800 transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold text-lg hover:-translate-y-0.5 transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-2"
               >
                 Create Your Portfolio
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

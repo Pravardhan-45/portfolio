@@ -153,3 +153,5 @@ export const validatePortfolioForm = ({
 
   return { isValid: errors.length === 0, errors };
 };
+
+export const isPortfolioComplete = (data) => validatePortfolioForm(data).isValid;
