@@ -14,7 +14,20 @@ const aiRoutes = require("./AI-Integration/routes/aiRoutes");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    // Allow localhost for development, and any vercel.app domain for production
+    const allowed = /localhost|127\.0\.0\.1|vercel\.app/;
+    if (allowed.test(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
