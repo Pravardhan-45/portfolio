@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../context/PortfolioContext';
-import axios from 'axios';
+import authClient from '../api/authApi';
 import TopNav from '../components/TopNav';
 
 function JDUpload() {
@@ -50,8 +50,7 @@ function JDUpload() {
       };
       formData.append('portfolio', JSON.stringify(portfolioData));
 
-      // Assuming backend runs on 5000
-      const response = await axios.post('/api/ai/analyze', formData, {
+      const response = await authClient.post('/ai/analyze', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
