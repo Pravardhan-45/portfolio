@@ -46,16 +46,12 @@ app.use("/api/portfolio", portfolioRouter);
 app.use("/api/download", downloadRoutes);
 app.use("/api/ai", aiRoutes);
 
-const path = require("path");
-
-// Serve frontend static files
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.json({ status: "ok", message: "Portfolio API is running" });
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
