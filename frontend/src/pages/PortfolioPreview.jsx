@@ -5,6 +5,7 @@ import { usePortfolio, PortfolioContext } from '../context/PortfolioContext';
 import MinimalTemplate from '../templates/MinimalTemplate';
 import ModernTemplate from '../templates/ModernTemplate';
 import ProfessionalTemplate from '../templates/ProfessionalTemplate';
+import TopNav from '../components/TopNav';
 
 const PortfolioPreview = () => {
   const originalContextData = usePortfolio();
@@ -151,7 +152,8 @@ const PortfolioPreview = () => {
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col">
-      
+      <TopNav />
+
       {/* --- Top Control Bar (Fixed) --- */}
       <div className="bg-white shadow-md p-4 flex flex-col sm:flex-row justify-between items-center z-50 sticky top-0">
         <div className="flex flex-col sm:flex-row items-center gap-3 mb-4 sm:mb-0">

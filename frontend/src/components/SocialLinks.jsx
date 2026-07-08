@@ -17,8 +17,8 @@ function SocialLinks() {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 mb-8">
-      <h2 className="text-2xl font-bold text-blue-700 mb-2">Social Links</h2>
+    <div className="bg-white shadow-lg rounded-2xl p-6 mb-8 border border-slate-100 hover:shadow-xl transition-shadow duration-300">
+      <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">Social Links</h2>
       <p className="text-xs text-gray-400 mb-6 flex items-center gap-1">
         <span className="text-red-500 font-bold">*</span> Required fields
       </p>

@@ -37,21 +37,17 @@ async function copyStarter(projectFolderName) {
 }
 
 /**
- * Copies only the selected template into the generated project.
+ * Keeps only the selected template in the generated project and rewrites
+ * App.jsx so it imports just that template.
  *
  * @param {string} generatedProjectPath
  * @param {string} templateName
+ * @returns {Promise<string>} selected template filename
  */
 async function setupSelectedTemplate(
     generatedProjectPath,
     templateName
 ) {
-    const starterTemplates = path.join(
-        STARTER_ROOT,
-        "src",
-        "templates"
-    );
-
     const generatedTemplates = path.join(
         generatedProjectPath,
         "src",
@@ -72,9 +68,35 @@ async function setupSelectedTemplate(
         throw new Error(`Invalid template: ${templateName}`);
     }
 
-    // Keep all templates in the generated project to prevent App.jsx from breaking
-    // due to missing imports. App.jsx will dynamically render the selectedTemplate.
-    
+    // Remove every template except the selected one.
+    await Promise.all(
+        Object.values(templateMap)
+            .filter((fileName) => fileName !== selectedTemplate)
+            .map((fileName) =>
+                fs.remove(path.join(generatedTemplates, fileName))
+            )
+    );
+
+    // Rewrite App.jsx to import only the selected template.
+    const componentName = selectedTemplate.replace(/\.jsx$/, "");
+
+    const appContent = `import React from "react";
+import portfolio from "./data/portfolio";
+import SelectedTemplate from "./templates/${componentName}";
+
+function App() {
+  return <SelectedTemplate data={portfolio} />;
+}
+
+export default App;
+`;
+
+    await fs.writeFile(
+        path.join(generatedProjectPath, "src", "App.jsx"),
+        appContent,
+        "utf8"
+    );
+
     return selectedTemplate;
 }
 

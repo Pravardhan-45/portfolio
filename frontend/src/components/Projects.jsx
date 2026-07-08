@@ -37,13 +37,13 @@ function Projects() {
   const removeProject = (index) => setProjects(projects.filter((_, i) => i !== index));
 
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 mb-8">
+    <div className="bg-white shadow-lg rounded-2xl p-6 mb-8 border border-slate-100 hover:shadow-xl transition-shadow duration-300">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
-        <h2 className="text-2xl font-bold text-blue-700">Projects</h2>
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Projects</h2>
         <button
           type="button"
           onClick={addProject}
-          className="self-start bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="self-start bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all"
         >
           + Add Another Project
         </button>

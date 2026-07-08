@@ -4,12 +4,18 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
 import { PortfolioProvider } from './context/PortfolioContext.jsx'
+import { NoticeProvider } from './context/NoticeContext.jsx'
+import { NavGuardProvider } from './context/NavGuardContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <PortfolioProvider>
-        <App />
+        <NoticeProvider>
+          <NavGuardProvider>
+            <App />
+          </NavGuardProvider>
+        </NoticeProvider>
       </PortfolioProvider>
     </BrowserRouter>
   </StrictMode>,

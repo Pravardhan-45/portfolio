@@ -1,4 +1,5 @@
 const downloadService = require("../services/downloadService");
+const { cleanup } = require("../services/cleanupService");
 
 /**
  * POST /api/download
@@ -36,7 +37,22 @@ async function downloadPortfolio(req, res) {
 
         return res.download(
             result.zipPath,
-            result.zipName
+            result.zipName,
+            (err) => {
+                // Remove the generated project folder and ZIP once the
+                // download has finished (or failed) so they don't pile up.
+                cleanup({
+                    generatedProjectPath: result.generatedProjectPath,
+                    zipPath: result.zipPath,
+                });
+
+                if (err && !res.headersSent) {
+                    res.status(500).json({
+                        success: false,
+                        message: "Failed to download portfolio."
+                    });
+                }
+            }
         );
 
     } catch (error) {
