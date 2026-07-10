@@ -158,8 +158,8 @@ function LandingPage() {
             </div>
           </div>
 
-          {/* Right Column (Illustration & Overlay Cards) */}
-          <div className="relative flex justify-center items-center">
+          {/* Right Column (Illustration) */}
+          <div className="flex justify-center items-center">
             {/* Main Illustration Panel */}
             <div className="w-full max-w-lg rounded-3xl overflow-hidden border border-slate-800/60 bg-white p-4 shadow-[0_20px_50px_rgba(99,102,241,0.15)]">
               <img
@@ -167,29 +167,6 @@ function LandingPage() {
                 alt="Developer Illustration"
                 className="w-full h-auto object-contain rounded-2xl"
               />
-            </div>
-
-            {/* Floating Card 1: Top Left */}
-            <div className="absolute -top-6 -left-6 md:-top-4 md:-left-4 glass-dark rounded-2xl border border-slate-800 shadow-[0_15px_30px_rgba(0,0,0,0.3)] p-4 flex items-center gap-3 animate-blob">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
-                📂
-              </div>
-              <div>
-                <h4 className="font-bold text-white text-sm font-display">Portfolio</h4>
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5 flex items-center gap-1 font-mono">
-                  <span>Published</span>
-                  <span className="text-emerald-400">✅</span>
-                </p>
-              </div>
-            </div>
-
-            {/* Floating Card 2: Bottom Right */}
-            <div className="absolute -bottom-6 -right-6 md:-bottom-4 md:-right-4 glass-dark rounded-2xl border border-slate-800 shadow-[0_15px_30px_rgba(0,0,0,0.3)] p-4 flex flex-col gap-1.5 animate-blob animation-delay-2000">
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Target Stack</span>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
-                <span className="font-bold text-white text-xs">React • Node • MongoDB</span>
-              </div>
             </div>
           </div>
         </div>
