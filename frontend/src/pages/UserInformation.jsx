@@ -272,15 +272,19 @@ function UserInformation() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans">
+    <div className="min-h-screen bg-slate-50/50 font-sans">
       <TopNav />
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white py-16 px-5 shadow-lg">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 drop-shadow-md">
+      <div className="bg-slate-950 text-white py-16 px-5 relative overflow-hidden grid-bg border-b border-slate-800/80">
+        {/* Background Glowing Blobs */}
+        <div className="absolute top-[-20%] left-[-10%] w-[300px] h-[300px] rounded-full bg-indigo-500/10 blur-[100px] animate-blob pointer-events-none"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[300px] h-[300px] rounded-full bg-purple-500/10 blur-[100px] animate-blob animation-delay-2000 pointer-events-none"></div>
+
+        <div className="max-w-6xl mx-auto text-center relative z-10">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 font-display">
             Build Your Portfolio
           </h1>
-          <p className="text-lg md:text-xl text-blue-100 font-medium max-w-2xl mx-auto">
+          <p className="text-sm text-slate-400 max-w-xl mx-auto font-light leading-relaxed">
             Fill in the details below to generate a stunning, AI-powered portfolio instantly.
           </p>
         </div>
@@ -288,17 +292,17 @@ function UserInformation() {
 
       <div className="max-w-6xl mx-auto px-5 pb-32 pt-8">
         {!loadingPortfolio && personalInfo?.fullName && (
-          <div className="mb-8 bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-xl flex items-center gap-3 shadow-sm">
-            <span className="text-2xl">👋</span>
+          <div className="mb-8 bg-emerald-500/5 border border-emerald-500/20 text-emerald-700 px-6 py-4 rounded-2xl flex items-center gap-4 shadow-sm backdrop-blur-sm animate-fade-in-up">
+            <span className="text-2xl bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20">👋</span>
             <div>
-              <p className="font-semibold text-lg">Welcome back!</p>
-              <p className="text-green-700 text-sm">We've securely loaded your saved portfolio data from your previous session.</p>
+              <p className="font-bold text-slate-950 font-display">Welcome back!</p>
+              <p className="text-slate-500 text-sm font-light">We've securely loaded your saved portfolio data from your previous session.</p>
             </div>
           </div>
         )}
         {loadingPortfolio && (
           <div className="flex justify-center items-center mb-8">
-            <span className="animate-pulse bg-blue-100 text-blue-800 px-6 py-2 rounded-full font-medium shadow-sm">
+            <span className="animate-pulse bg-indigo-500/10 text-indigo-700 border border-indigo-500/20 px-6 py-2.5 rounded-xl font-semibold shadow-sm text-sm uppercase tracking-wider">
               Loading your saved portfolio...
             </span>
           </div>
@@ -317,16 +321,16 @@ function UserInformation() {
         </div>
 
         {errors.length > 0 && (
-          <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-6 mt-10 shadow-sm">
-            <h3 className="font-bold text-red-800 mb-2 text-lg">
+          <div className="bg-rose-500/5 border-l-4 border-rose-500 rounded-r-2xl p-6 mt-10 shadow-sm border border-rose-500/10">
+            <h3 className="font-bold text-rose-800 mb-2 text-lg font-display">
               Action Required
             </h3>
-            <p className="text-red-700 mb-3">Please fix the following issues before continuing:</p>
-            <ul className="list-disc list-inside text-red-600 space-y-1.5 font-medium">
+            <p className="text-slate-600 mb-3 text-sm font-light">Please fix the following issues before continuing:</p>
+            <ul className="list-disc list-inside text-rose-600 space-y-1.5 text-xs font-semibold">
               {errors.map((err, index) => (
                 <li
                   key={index}
-                  className="cursor-pointer hover:text-red-800 hover:underline transition-colors"
+                  className="cursor-pointer hover:text-rose-800 hover:underline transition-colors"
                   onClick={() => {
                     if (err.fieldId) {
                       const el = document.getElementById(err.fieldId);
@@ -346,12 +350,12 @@ function UserInformation() {
       </div>
 
       {/* Sticky Bottom Save Bar */}
-      <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] p-4 z-40">
+      <div className="fixed bottom-0 left-0 w-full bg-white/80 border-t border-slate-200/80 shadow-[0_-4px_12px_rgba(0,0,0,0.03)] p-4 z-40 backdrop-blur-md">
         <div className="max-w-6xl mx-auto flex justify-center md:justify-end">
           <button
             onClick={handleSave}
             disabled={savingPortfolio}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-lg px-12 py-3 rounded-full hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-sm px-10 py-3.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all uppercase tracking-wider font-display"
           >
             {savingPortfolio ? (
               <span className="flex items-center gap-2">
@@ -368,32 +372,32 @@ function UserInformation() {
 
       {/* Unsaved-changes confirmation modal */}
       {pendingNav && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 animate-fade-in-up">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm px-4">
+          <div className="glass-dark shadow-2xl max-w-md w-full p-8 rounded-2xl animate-fade-in-up border border-slate-800/80">
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">⚠️</span>
-              <h3 className="text-xl font-bold text-slate-900">Unsaved changes</h3>
+              <span className="text-3xl bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 text-amber-400">⚠️</span>
+              <h3 className="text-xl font-bold text-white font-display">Unsaved changes</h3>
             </div>
-            <p className="text-slate-600 mb-6">
+            <p className="text-slate-400 mb-6 text-sm font-light leading-relaxed">
               You have unsaved changes to your portfolio. Would you like to save them before leaving this page?
             </p>
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleSaveAndLeave}
                 disabled={savingPortfolio}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all text-xs uppercase tracking-wider font-display disabled:opacity-50"
               >
                 {savingPortfolio ? "Saving..." : "Save & Leave"}
               </button>
               <button
                 onClick={handleLeaveWithoutSaving}
-                className="w-full bg-white border border-red-200 text-red-600 font-semibold py-3 rounded-lg hover:bg-red-50 transition-colors"
+                className="w-full bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold py-3.5 rounded-xl hover:bg-rose-500/20 transition-all text-xs uppercase tracking-wider"
               >
                 Leave without saving
               </button>
               <button
                 onClick={() => setPendingNav(null)}
-                className="w-full text-slate-500 font-medium py-2 hover:text-slate-700 transition-colors"
+                className="w-full text-slate-400 font-semibold py-2 hover:text-white transition-colors text-xs uppercase tracking-wider"
               >
                 Stay on this page
               </button>

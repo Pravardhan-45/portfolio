@@ -27,18 +27,20 @@ function TopNav() {
   };
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center gap-4">
+    <nav className="bg-slate-900/85 border-b border-slate-800/80 backdrop-blur-md sticky top-0 z-40">
+      <div className="max-w-7xl mx-auto px-6 py-3.5 flex justify-between items-center gap-4">
         {/* Logo Section */}
         <Link
           to="/choose-flow"
           onClick={guardClick("/choose-flow")}
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity shrink-0"
+          className="flex items-center gap-2.5 hover:opacity-95 transition-opacity shrink-0"
         >
-          <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">P</span>
+          <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-lg flex items-center justify-center shadow-md shadow-indigo-500/10">
+            <span className="text-white font-extrabold text-base">P</span>
           </div>
-          <span className="text-xl font-bold text-gray-900 tracking-tight hidden sm:inline">PortfolioPro</span>
+          <span className="text-xl font-bold tracking-tight text-white font-display hidden sm:inline">
+            Portfolio<span className="text-indigo-400">Pro</span>
+          </span>
         </Link>
 
         {/* Navigation Links */}
@@ -50,10 +52,10 @@ function TopNav() {
                 key={link.to}
                 to={link.to}
                 onClick={guardClick(link.to)}
-                className={`px-3 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-1.5 ${
+                className={`px-3 py-2 rounded-xl font-semibold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 border ${
                   active
-                    ? "bg-indigo-50 text-indigo-700"
-                    : "text-gray-600 hover:text-indigo-600 hover:bg-gray-50"
+                    ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-400"
+                    : "text-slate-300 border-transparent hover:text-indigo-400 hover:bg-slate-800/50"
                 }`}
               >
                 <span>{link.icon}</span>
@@ -62,11 +64,11 @@ function TopNav() {
             );
           })}
 
-          <div className="w-px h-6 bg-gray-200 mx-1 hidden sm:block"></div>
+          <div className="w-px h-6 bg-slate-800 mx-2 hidden sm:block"></div>
 
           <button
             onClick={handleLogout}
-            className="px-3 py-2 rounded-lg text-gray-600 hover:text-red-600 hover:bg-red-50 font-medium text-sm transition-colors flex items-center gap-1.5"
+            className="px-3 py-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 font-semibold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5"
           >
             <span>🚪</span>
             <span className="hidden md:inline">Logout</span>
