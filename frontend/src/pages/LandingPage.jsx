@@ -110,7 +110,7 @@ function LandingPage() {
       <section className="max-w-7xl mx-auto px-6 pt-24 pb-16 text-center relative z-10">
         <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-indigo-500/10 text-indigo-300 text-xs font-semibold tracking-wide border border-indigo-500/20 uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
-          Ultimate Developer Portfolio Builder
+          Portfolio Builder
         </div>
 
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-none mb-8 font-display">
@@ -184,13 +184,11 @@ function LandingPage() {
         {/* Live Mock Screen Frame */}
         <div className="bg-slate-950/80 rounded-2xl border border-slate-800/80 shadow-2xl p-2 relative overflow-hidden backdrop-blur-sm">
           {/* Header Bar */}
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-900 bg-slate-950/60 rounded-t-xl">
+          <div className="flex items-center gap-2 px-4 py-3.5 border-b border-slate-900 bg-slate-950/60 rounded-t-xl">
             <span className="w-3 h-3 rounded-full bg-red-500/80"></span>
             <span className="w-3 h-3 rounded-full bg-yellow-500/80"></span>
             <span className="w-3 h-3 rounded-full bg-green-500/80"></span>
-            <div className="bg-slate-900 text-slate-500 text-xs px-8 py-1 rounded-md mx-auto truncate max-w-xs font-mono">
-              https://jane-doe.dev
-            </div>
+            <span className="text-slate-500 text-xs font-mono uppercase tracking-wider font-semibold ml-4">Live Theme Preview</span>
           </div>
 
           {/* Sandbox Render Window */}
