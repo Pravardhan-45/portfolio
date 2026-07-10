@@ -110,7 +110,7 @@ function LandingPage() {
       <section className="max-w-7xl mx-auto px-6 pt-24 pb-16 text-center relative z-10">
         <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-indigo-500/10 text-indigo-300 text-xs font-semibold tracking-wide border border-indigo-500/20 uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
-          Revolutionary AI Portfolio Builder
+          Ultimate Developer Portfolio Builder
         </div>
 
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-none mb-8 font-display">
@@ -189,7 +189,7 @@ function LandingPage() {
             <span className="w-3 h-3 rounded-full bg-yellow-500/80"></span>
             <span className="w-3 h-3 rounded-full bg-green-500/80"></span>
             <div className="bg-slate-900 text-slate-500 text-xs px-8 py-1 rounded-md mx-auto truncate max-w-xs font-mono">
-              https://pravardhan.dev
+              https://jane-doe.dev
             </div>
           </div>
 
