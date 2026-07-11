@@ -110,7 +110,6 @@ const TechProTemplate = () => {
                   alt="Profile" 
                   className="w-32 h-32 object-cover rounded filter grayscale hover:grayscale-0 transition-all duration-500"
                 />
-                <div className="text-center mt-2 text-xs text-[#8b949e] font-mono">avatar.png</div>
               </div>
             )}
           </div>
