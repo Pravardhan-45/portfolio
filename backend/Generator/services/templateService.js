@@ -69,6 +69,8 @@ async function setupSelectedTemplate(
         throw new Error(`Invalid template: ${templateName}`);
     }
 
+    const componentName = selectedTemplate.replace(".jsx", "");
+
     // Remove every template except the selected one.
     await Promise.all(
         Object.values(templateMap)

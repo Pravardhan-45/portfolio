@@ -13,7 +13,7 @@ class GeminiProvider extends AIProvider {
     constructor() {
         super();
         this.ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-        this.model = "gemini-1.5-flash";
+        this.model = "gemini-2.5-flash";
     }
 
     async analyze(prompt) {
