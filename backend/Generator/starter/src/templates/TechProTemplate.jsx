@@ -15,8 +15,13 @@ const staggerContainer = {
 const TechProTemplate = () => {
   const { personalInfo, aboutMe, socialLinks, skills, experience, projects, education } = useContext(PortfolioContext);
 
+  const defaultRole = experience?.[0]?.role || "Software Engineer";
   const data = {
-    personalInfo: personalInfo?.fullName ? personalInfo : {
+    personalInfo: personalInfo?.fullName ? {
+      ...personalInfo,
+      name: personalInfo.fullName,
+      role: defaultRole
+    } : {
       name: "Arun Kumar Swami", role: "Software Engineer", email: "arun@example.com", phone: "+91 9876543210", location: "Lucknow, India",
     },
     aboutMe: aboutMe || "Software Engineer specializing in backend architecture, competitive programming, and algorithmic problem-solving. Focused on building highly scalable, fault-tolerant systems using modern developer tools and generative AI.",
