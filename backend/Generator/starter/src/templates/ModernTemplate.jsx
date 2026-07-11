@@ -261,7 +261,7 @@ const ModernTemplate = () => {
             {achievements && achievements.trim() && (
               <motion.section variants={fadeUp}>
                 <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-4">
-                  Milestones <span className="h-px bg-slate-800 flex-grow"></span>
+                  Achievements <span className="h-px bg-slate-800 flex-grow"></span>
                 </h2>
                 <div className="bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 border border-slate-800/80">
                   <ul className="space-y-4">

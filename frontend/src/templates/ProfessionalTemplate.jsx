@@ -237,7 +237,7 @@ const ProfessionalTemplate = () => {
             {data.projects && data.projects.length > 0 && (
               <motion.section variants={slideUp}>
                 <h2 className="text-3xl font-extrabold text-slate-900 mb-10 flex items-center gap-4">
-                  Key Initiatives
+                  Projects
                   <span className="h-px bg-slate-200 flex-grow"></span>
                 </h2>
                 <div className="grid grid-cols-1 gap-6">

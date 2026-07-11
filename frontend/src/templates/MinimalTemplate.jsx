@@ -187,9 +187,11 @@ const MinimalTemplate = () => {
             <div className="grid md:grid-cols-2 gap-6">
               {data.education.map((edu, index) => (
                 <div key={index} className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-                  <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">{edu.year}</span>
+                  <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">
+                    {edu.year || (edu.startYear && edu.endYear ? `${edu.startYear} - ${edu.endYear}` : edu.startYear || edu.endYear || "")}
+                  </span>
                   <h3 className="text-base font-bold text-slate-900 mt-1 font-display">{edu.degree}</h3>
-                  <p className="text-sm text-slate-500 mt-1 font-light">{edu.institution}</p>
+                  <p className="text-sm text-slate-500 mt-1 font-light">{edu.institute || edu.institution}</p>
                 </div>
               ))}
             </div>
