@@ -143,7 +143,7 @@ function LandingPage() {
             {/* Stats Cards Grid */}
             <div className="grid grid-cols-2 gap-5 pt-8 max-w-md">
               <div className="glass-dark rounded-2xl border border-slate-800/80 p-5 shadow-xl hover:border-slate-700 transition-colors">
-                <h3 className="font-black text-indigo-400 text-4xl font-display">50+</h3>
+                <h3 className="font-black text-indigo-400 text-4xl font-display">4</h3>
                 <p className="text-slate-500 text-[10px] mt-2 uppercase font-bold tracking-wider font-mono">
                   Professional Templates
                 </p>
