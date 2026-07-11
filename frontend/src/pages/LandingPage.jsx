@@ -32,7 +32,7 @@ function LandingPage() {
     },
     {
       q: "What templates are currently available?",
-      a: "We currently offer three professionally curated themes: Minimalist (light & text-focused), Modern (sleek dark mode with gradient cards), and Executive Sidebar (formal layout designed for corporate roles)."
+      a: "We currently offer four professionally curated themes: Minimalist (light & typography-focused), Modern (sleek dark mode with indigo highlights), Professional (formal executive layout designed for corporate roles), and TechPro (sleek dark mode developer layout with branch timeline highlights)."
     }
   ];
 
