@@ -50,76 +50,48 @@ const TechProTemplate = () => {
         {}
         <motion.header 
           initial="hidden" animate="visible" variants={fadeUp} 
-          className="mb-24 rounded-xl bg-[#161b22] border border-[#30363d] overflow-hidden shadow-2xl shadow-[#3fb950]/10"
+          className="mb-20 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 border-b border-[#30363d] pb-16"
         >
-          {}
-          <div className="flex px-4 py-3 bg-[#0d1117] border-b border-[#30363d] gap-2 items-center">
-            <div className="w-3 h-3 rounded-full bg-[#ff5f56] shadow-sm"></div>
-            <div className="w-3 h-3 rounded-full bg-[#ffbd2e] shadow-sm"></div>
-            <div className="w-3 h-3 rounded-full bg-[#27c93f] shadow-sm"></div>
-            <span className="ml-4 text-xs font-mono text-[#8b949e]">guest@portfolio: ~</span>
-          </div>
-          
-          <div className="p-8 md:p-12 font-mono text-sm md:text-base leading-relaxed flex flex-col md:flex-row gap-8 items-start">
-            
-            <div className="flex-grow space-y-6">
-               <div>
-                 <div className="text-[#79c0ff] flex items-center gap-2 font-mono">
-                   $ whoami
-                   <motion.span 
-                     animate={{ opacity: [1, 0] }} 
-                     transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
-                     className="w-2 h-4 bg-[#c9d1d9] inline-block"
-                   />
-                 </div>
-                 <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mt-2 font-sans">
-                   {data.personalInfo.name}
-                 </h1>
-               </div>
- 
-               <div className="space-y-4 font-mono text-sm md:text-base">
-                 <div>
-                   <div className="text-[#79c0ff]">$ query --profile</div>
-                   <div className="mt-2 pl-4 space-y-1 text-[#c9d1d9]">
-                     <p><span className="text-[#ff7b72]">💼 Role:</span> {data.personalInfo.role}</p>
-                     <p><span className="text-[#ff7b72]">📍 Location:</span> {data.personalInfo.location}</p>
-                   </div>
-                 </div>
- 
-                 <div>
-                   <div className="text-[#79c0ff]">$ list --contacts</div>
-                   <div className="pt-3 pl-4 flex flex-wrap gap-6 font-sans text-sm font-semibold">
-                     {data.personalInfo.email && (
-                       <a href={`mailto:${data.personalInfo.email}`} className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
-                         <span className="text-[#ff7b72] font-mono text-lg leading-none">▸</span> {data.personalInfo.email}
-                       </a>
-                     )}
-                     {data.socialLinks?.github && (
-                       <a href={data.socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
-                         <span className="text-[#ff7b72] font-mono text-lg leading-none">▸</span> GitHub
-                       </a>
-                     )}
-                     {data.socialLinks?.linkedin && (
-                       <a href={data.socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
-                         <span className="text-[#ff7b72] font-mono text-lg leading-none">▸</span> LinkedIn
-                       </a>
-                     )}
-                   </div>
-                 </div>
-               </div>
-             </div>
+          <div className="flex-grow space-y-4">
+            <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight font-sans">
+              {data.personalInfo.name}
+            </h1>
+            <p className="text-lg md:text-2xl text-[#58a6ff] font-semibold font-sans">
+              {data.personalInfo.role}
+            </p>
+            <p className="text-slate-400 flex items-center gap-2 text-sm">
+              📍 {data.personalInfo.location}
+            </p>
 
-            {}
-            {data.personalInfo?.profilePhoto && (
-              <div className="hidden md:block shrink-0 p-2 border border-[#30363d] rounded bg-[#0d1117] rotate-3 hover:rotate-0 transition-transform duration-300 shadow-xl">
-                <img 
-                  src={data.personalInfo.profilePhoto} 
-                  alt="Profile" 
-                  className="w-32 h-32 object-cover rounded filter grayscale hover:grayscale-0 transition-all duration-500"
-                />
-              </div>
-            )}
+            <div className="flex flex-wrap gap-6 pt-4 text-sm font-semibold">
+              {data.personalInfo.email && (
+                <a href={`mailto:${data.personalInfo.email}`} className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
+                  ✉ {data.personalInfo.email}
+                </a>
+              )}
+              {data.socialLinks?.github && (
+                <a href={data.socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
+                  GitHub
+                </a>
+              )}
+              {data.socialLinks?.linkedin && (
+                <a href={data.socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
+                  LinkedIn
+                </a>
+              )}
+            </div>
           </div>
+
+          {data.personalInfo?.profilePhoto && (
+            <div className="shrink-0 relative group">
+              <div className="absolute inset-0 bg-[#58a6ff]/10 rounded-2xl blur-xl opacity-30 group-hover:opacity-60 transition-opacity duration-500"></div>
+              <img 
+                src={data.personalInfo.profilePhoto} 
+                alt="Profile" 
+                className="relative w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border border-[#30363d] shadow-2xl"
+              />
+            </div>
+          )}
         </motion.header>
 
         {/* --- Main Content --- */}
@@ -131,8 +103,8 @@ const TechProTemplate = () => {
           {/* About */}
           {data.aboutMe && (
             <motion.section variants={fadeUp}>
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-4 font-mono">
-                <span className="text-[#3fb950]">01.</span> About
+              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-4">
+                About
                 <div className="h-px bg-[#30363d] flex-grow"></div>
               </h2>
               <p className="text-lg text-[#8b949e] leading-relaxed max-w-4xl border-l-2 border-[#30363d] pl-6 hover:border-[#79c0ff] transition-colors duration-300">
@@ -144,8 +116,8 @@ const TechProTemplate = () => {
           {/* Experience (Git Branch Timeline) */}
           {data.experience && (
             <motion.section variants={fadeUp}>
-              <h2 className="text-2xl font-bold text-white mb-10 flex items-center gap-4 font-mono">
-                <span className="text-[#3fb950]">02.</span> Experience
+              <h2 className="text-2xl font-bold text-white mb-10 flex items-center gap-4">
+                Experience
                 <div className="h-px bg-[#30363d] flex-grow"></div>
               </h2>
               <div className="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-[2px] before:bg-gradient-to-b before:from-[#3fb950] before:via-[#30363d] before:to-transparent">
@@ -159,7 +131,7 @@ const TechProTemplate = () => {
                     
                     {/* Content Card */}
                     <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-[#161b22] border border-[#30363d] p-6 rounded-xl hover:border-[#3fb950]/80 hover:shadow-lg hover:shadow-[#3fb950]/10 transition-all duration-300">
-                      <div className="flex flex-col mb-3">
+                      <div className="flex flex-col mb-3 font-sans">
                         <span className="text-[#79c0ff] font-mono text-sm mb-1">{exp.duration}</span>
                         <h3 className="text-xl font-bold text-white">{exp.role}</h3>
                         <span className="text-[#3fb950] font-semibold">{exp.company}</span>
@@ -174,29 +146,25 @@ const TechProTemplate = () => {
             </motion.section>
           )}
 
-          {/* Projects (Terminal Panels) */}
+          {/* Projects */}
           {data.projects && (
             <motion.section variants={fadeUp}>
-              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-4 font-mono">
-                <span className="text-[#3fb950]">03.</span> Architecture & Builds
+              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-4">
+                Projects
                 <div className="h-px bg-[#30363d] flex-grow"></div>
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {data.projects.map((proj, index) => (
                   <div key={index} className="bg-[#161b22] border border-[#30363d] rounded-xl overflow-hidden hover:-translate-y-2 hover:border-[#58a6ff]/50 hover:shadow-2xl hover:shadow-[#58a6ff]/10 transition-all duration-300 flex flex-col group">
-                    <div className="bg-[#0d1117] px-4 py-3 border-b border-[#30363d] flex justify-between items-center">
-                      <span className="font-mono text-xs text-[#8b949e] flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#3fb950] inline-block animate-pulse"></span>
-                        {proj.title ? proj.title.toLowerCase().replace(/\s+/g, '-') : 'project'}.sh
-                      </span>
-                      {(proj.link || proj.liveLink || proj.githubLink) && (
-                        <a href={proj.link || proj.liveLink || proj.githubLink} target="_blank" rel="noreferrer" className="text-xs font-mono text-[#58a6ff] hover:text-white transition-colors">
-                          [execute]
-                        </a>
-                      )}
-                    </div>
                     <div className="p-6 flex flex-col flex-grow">
-                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#58a6ff] transition-colors">{proj.title || proj.name}</h3>
+                      <div className="flex justify-between items-start mb-3">
+                        <h3 className="text-xl font-bold text-white group-hover:text-[#58a6ff] transition-colors">{proj.title || proj.name}</h3>
+                        {(proj.link || proj.liveLink || proj.githubLink) && (
+                          <a href={proj.link || proj.liveLink || proj.githubLink} target="_blank" rel="noreferrer" className="text-xs text-[#58a6ff] hover:underline">
+                            View Project ↗
+                          </a>
+                        )}
+                      </div>
                       <p className="text-[#8b949e] text-sm mb-6 flex-grow leading-relaxed">{proj.description}</p>
                       <div className="flex flex-wrap gap-2">
                         {proj.techStack?.map((tech, i) => (
@@ -212,18 +180,18 @@ const TechProTemplate = () => {
             </motion.section>
           )}
 
-          {/* Dependencies / Skills Grid */}
+          {/* Skills Grid */}
           {data.skills && (
             <motion.section variants={fadeUp}>
-              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-4 font-mono">
-                <span className="text-[#3fb950]">04.</span> Dependencies
+              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-4">
+                Skills
                 <div className="h-px bg-[#30363d] flex-grow"></div>
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {data.skills.map((skill, index) => (
                   <div key={index} className="flex items-center gap-3 bg-[#161b22] border border-[#30363d] px-4 py-3 rounded-lg hover:border-[#d2a8ff]/50 hover:bg-[#d2a8ff]/5 transition-all duration-300 cursor-default hover:-translate-y-1">
                     <div className="w-2 h-2 rounded-full bg-[#d2a8ff]"></div>
-                    <span className="font-mono text-sm text-[#c9d1d9]">{skill}</span>
+                    <span className="text-sm text-[#c9d1d9]">{skill}</span>
                   </div>
                 ))}
               </div>
@@ -233,8 +201,8 @@ const TechProTemplate = () => {
           {/* Education */}
           {data.education && data.education.length > 0 && (
             <motion.section variants={fadeUp} className="pb-20">
-              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-4 font-mono">
-                <span className="text-[#3fb950]">05.</span> Education
+              <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-4">
+                Education
                 <div className="h-px bg-[#30363d] flex-grow"></div>
               </h2>
               <div className="grid md:grid-cols-2 gap-6">

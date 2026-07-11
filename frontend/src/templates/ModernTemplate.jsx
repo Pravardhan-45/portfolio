@@ -146,7 +146,7 @@ const ModernTemplate = () => {
         {/* --- Skills Section --- */}
         {data.skills && data.skills.length > 0 && (
           <motion.section variants={fadeUp} className="mb-32">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-8 text-center">Technical Arsenal</h2>
+            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-8 text-center">Skills</h2>
             <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
               {data.skills.map((skill, index) => (
                 <span 
@@ -196,7 +196,7 @@ const ModernTemplate = () => {
           {data.projects && data.projects.length > 0 && (
             <motion.section variants={fadeUp} className="flex flex-col h-full">
               <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-4">
-                Selected Work <span className="h-px bg-slate-800 flex-grow"></span>
+                Projects <span className="h-px bg-slate-800 flex-grow"></span>
               </h2>
               
               <div className="space-y-6 flex-grow">

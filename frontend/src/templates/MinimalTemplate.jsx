@@ -122,7 +122,7 @@ const MinimalTemplate = () => {
         {/* Skills Section */}
         {data.skills && data.skills.length > 0 && (
           <motion.section variants={fadeUp} className="space-y-6">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono">01 // Key Competencies</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono">Skills</h2>
             <div className="flex flex-wrap gap-2.5">
               {data.skills.map((skill, index) => (
                 <span 
@@ -139,7 +139,7 @@ const MinimalTemplate = () => {
         {/* Projects Section */}
         {data.projects && data.projects.length > 0 && (
           <motion.section variants={fadeUp} className="space-y-8">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono">02 // Selected Projects</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono">Projects</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {data.projects.map((proj, index) => (
                 <div key={index} className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
@@ -163,7 +163,7 @@ const MinimalTemplate = () => {
         {/* Experience Section */}
         {data.experience && data.experience.length > 0 && (
           <motion.section variants={fadeUp} className="space-y-8">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono">03 // Work History</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono">Experience</h2>
             <div className="space-y-8 border-l border-slate-200 pl-6">
               {data.experience.map((exp, index) => (
                 <div key={index} className="relative space-y-2">
@@ -183,7 +183,7 @@ const MinimalTemplate = () => {
         {/* Education Section */}
         {data.education && data.education.length > 0 && (
           <motion.section variants={fadeUp} className="space-y-8">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono">04 // Education</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono">Education</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {data.education.map((edu, index) => (
                 <div key={index} className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
