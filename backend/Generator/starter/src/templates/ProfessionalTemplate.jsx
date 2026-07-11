@@ -1,6 +1,24 @@
-import React from 'react';
-import portfolioData from '../data/portfolio';
+import React, { useContext } from 'react';
+import { motion } from 'framer-motion';
+import { PortfolioContext } from '../context/PortfolioContext';
 
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.6 } }
+};
+
+const slideUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
 
 const ProfessionalTemplate = () => {
   const { 
@@ -12,7 +30,7 @@ const ProfessionalTemplate = () => {
     projects, 
     education,
     achievements
-  } = portfolioData;
+  } = useContext(PortfolioContext);
 
   const data = {
     personalInfo: personalInfo?.fullName ? personalInfo : {
@@ -22,7 +40,7 @@ const ProfessionalTemplate = () => {
       phone: "+91 9876543210",
       location: "Lucknow, India",
     },
-    aboutMe: aboutMe || "Driven Software Engineer with a strong foundation in data structures, competitive programming, and backend architecture. Passionate about leveraging developer tools and generative AI to build scalable applications.",
+    aboutMe: aboutMe || "Driven Software Engineer with a strong foundation in data structures, competitive programming, and backend architecture. Passionate about leveraging developer tools and generative AI to build scalable, high-performance applications that deliver immediate business value.",
     socialLinks: socialLinks || {
       github: "https://github.com/",
       linkedin: "https://linkedin.com/",
@@ -34,25 +52,25 @@ const ProfessionalTemplate = () => {
         role: "Technical Solution Engineer (Intern)",
         company: "AlgoUniversity",
         duration: "June 2026 - Present",
-        description: "Focusing on robust technical solutions, debugging, and assisting in software architecture design in a remote environment."
+        description: "Focusing on robust technical solutions, debugging complex logic flows, and assisting in software architecture design in a highly collaborative remote environment."
       },
       {
         role: "Software Engineer I (Candidate)",
         company: "American Express",
         duration: "May 2026",
-        description: "Engaged in the talent acquisition process for building enterprise-level financial applications."
+        description: "Engaged in the rigorous talent acquisition process focused on building resilient, enterprise-level financial applications."
       }
     ],
     projects: projects?.length > 0 && projects[0].name ? projects : [
       {
         title: "Flipkart GRiD 6.0",
-        description: "Collaborated on team-based engineering challenges and technical problem-solving.",
-        techStack: ["System Design", "Algorithms"],
+        description: "Collaborated on team-based engineering challenges, focusing on rapid technical problem-solving and highly optimized system design.",
+        techStack: ["System Design", "Algorithms", "Optimization"],
         link: "#"
       },
       {
         title: "Advanced Data Structures Implementations",
-        description: "Comprehensive implementation of advanced graph algorithms and interview patterns.",
+        description: "Comprehensive implementation of advanced graph algorithms and dynamic programming interview patterns.",
         techStack: ["C++", "Graphs", "Dynamic Programming"],
         link: "#"
       }
@@ -72,145 +90,225 @@ const ProfessionalTemplate = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-100 font-sans text-neutral-800 flex justify-center p-4 md:p-8">
-      <div className="max-w-6xl w-full bg-white shadow-xl rounded-lg overflow-hidden flex flex-col md:flex-row border border-neutral-200">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-blue-200 selection:text-blue-900">
+      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row min-h-screen shadow-2xl shadow-slate-200/50">
         
-        {/* --- Left Sidebar --- */}
-        <aside className="w-full md:w-1/3 bg-slate-800 text-white p-8 flex flex-col">
-          <div className="mb-10 text-center md:text-left">
-            {data.personalInfo?.profilePhoto && (
-              <img 
-                src={data.personalInfo.profilePhoto} 
-                alt="Profile" 
-                className="w-32 h-32 rounded-full object-cover border-4 border-slate-600 mb-6 mx-auto md:mx-0 shadow-lg"
-              />
+        {/* --- Left Sidebar (Sticky on Desktop) --- */}
+        <motion.aside 
+          initial="hidden"
+          animate="visible"
+          variants={fadeIn}
+          className="w-full lg:w-[400px] bg-slate-900 text-slate-100 flex flex-col lg:sticky lg:top-0 lg:h-screen overflow-y-auto border-r border-slate-800 shrink-0"
+        >
+          <div className="p-10 flex-grow flex flex-col">
+            
+            {/* Profile Header */}
+            <div className="mb-12 text-center lg:text-left">
+              {data.personalInfo?.profilePhoto && (
+                <div className="relative inline-block mb-6">
+                  <div className="absolute inset-0 border-2 border-blue-500 rounded-full blur-[2px] opacity-60"></div>
+                  <img 
+                    src={data.personalInfo.profilePhoto} 
+                    alt="Profile" 
+                    className="relative w-36 h-36 rounded-full object-cover border-4 border-slate-800 shadow-xl mx-auto lg:mx-0"
+                  />
+                </div>
+              )}
+              <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-white mb-2">
+                {data.personalInfo?.fullName || data.personalInfo?.name}
+              </h1>
+              <h2 className="text-lg font-medium text-blue-400 tracking-wide uppercase text-sm">
+                {data.personalInfo?.role || "Software Engineer"}
+              </h2>
+            </div>
+
+            {/* Contact Information */}
+            <div className="space-y-4 mb-12">
+              {data.personalInfo?.email && (
+                <a href={`mailto:${data.personalInfo.email}`} className="flex items-center gap-4 text-slate-300 hover:text-white transition-colors group">
+                  <span className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center group-hover:bg-blue-600 transition-colors">✉</span>
+                  <span className="text-sm font-medium">{data.personalInfo.email}</span>
+                </a>
+              )}
+              {data.personalInfo?.phone && (
+                <div className="flex items-center gap-4 text-slate-300 group">
+                  <span className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">☏</span>
+                  <span className="text-sm font-medium">{data.personalInfo.phone}</span>
+                </div>
+              )}
+              {data.personalInfo?.location && (
+                <div className="flex items-center gap-4 text-slate-300 group">
+                  <span className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">📍</span>
+                  <span className="text-sm font-medium">{data.personalInfo.location}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Core Competencies (Skills moved to sidebar for a cleaner main view) */}
+            {data.skills && data.skills.length > 0 && (
+              <div className="mb-12">
+                <h3 className="text-xs font-bold tracking-widest uppercase text-slate-500 mb-5 pb-2 border-b border-slate-800">Core Competencies</h3>
+                <div className="flex flex-wrap gap-2">
+                  {data.skills.map((skill, index) => (
+                    <span key={index} className="px-3 py-1.5 bg-slate-800 text-slate-300 text-xs font-semibold rounded-md border border-slate-700 hover:border-blue-500 hover:text-white transition-colors">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
             )}
-            <h1 className="text-3xl md:text-4xl font-bold mb-2 tracking-tight">{data.personalInfo?.fullName || data.personalInfo?.name}</h1>
-            <h2 className="text-lg text-slate-300 font-medium">{data.personalInfo?.role || "Software Engineer"}</h2>
-          </div>
 
-          <div className="space-y-6 mb-10 flex-grow">
-            <div className="space-y-3 text-sm text-slate-300">
-              {data.personalInfo?.email && <p className="flex items-center gap-3"><span className="text-xl">✉</span> {data.personalInfo.email}</p>}
-              {data.personalInfo?.phone && <p className="flex items-center gap-3"><span className="text-xl">☏</span> {data.personalInfo.phone}</p>}
-              {data.personalInfo?.location && <p className="flex items-center gap-3"><span className="text-xl">📍</span> {data.personalInfo.location}</p>}
-            </div>
-
-            <div className="pt-6 border-t border-slate-600 space-y-3">
-              <h3 className="text-lg font-semibold tracking-wider uppercase text-slate-200">Links</h3>
-              {data.socialLinks?.github && <a href={data.socialLinks.github} className="block text-sm text-blue-300 hover:text-white transition">GitHub Profile</a>}
-              {data.socialLinks?.linkedin && <a href={data.socialLinks.linkedin} className="block text-sm text-blue-300 hover:text-white transition">LinkedIn Profile</a>}
-              {data.socialLinks?.portfolio && <a href={data.socialLinks.portfolio} className="block text-sm text-blue-300 hover:text-white transition">Personal Website</a>}
-            </div>
-          </div>
-
-          {/* Education in Sidebar for Professional look */}
-          {data.education && data.education.length > 0 && (
-            <div className="pt-6 border-t border-slate-600">
-              <h3 className="text-lg font-semibold tracking-wider uppercase text-slate-200 mb-4">Education</h3>
-              <div className="space-y-4">
-                {data.education.map((edu, index) => (
-                  <div key={index}>
-                    <p className="font-medium text-white">{edu.degree}</p>
-                    <p className="text-sm text-slate-400">{edu.institution || edu.institute}</p>
-                    <p className="text-xs text-slate-500 mt-1">{edu.year || `${edu.startYear} - ${edu.endYear}`}</p>
-                  </div>
-                ))}
+            {/* Social Links */}
+            <div className="mt-auto pt-8 border-t border-slate-800">
+              <h3 className="text-xs font-bold tracking-widest uppercase text-slate-500 mb-5">Professional Network</h3>
+              <div className="flex flex-col gap-3">
+                {data.socialLinks?.linkedin && (
+                  <a href={data.socialLinks.linkedin} target="_blank" rel="noreferrer" className="text-sm font-medium text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2">
+                    LinkedIn Profile &rarr;
+                  </a>
+                )}
+                {data.socialLinks?.github && (
+                  <a href={data.socialLinks.github} target="_blank" rel="noreferrer" className="text-sm font-medium text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2">
+                    GitHub Repository &rarr;
+                  </a>
+                )}
+                {data.socialLinks?.portfolio && (
+                  <a href={data.socialLinks.portfolio} target="_blank" rel="noreferrer" className="text-sm font-medium text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-2">
+                    Personal Portfolio &rarr;
+                  </a>
+                )}
               </div>
             </div>
-          )}
-        </aside>
+
+          </div>
+        </motion.aside>
 
         {/* --- Right Main Content --- */}
-        <main className="w-full md:w-2/3 p-8 md:p-12 bg-white">
-          
-          {/* About */}
-          {data.aboutMe && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-bold text-slate-800 border-b-2 border-slate-200 pb-2 mb-4 uppercase tracking-wider">Professional Profile</h2>
-              <p className="text-neutral-600 leading-relaxed text-justify">
-                {data.aboutMe}
-              </p>
-            </section>
-          )}
+        <motion.main 
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="flex-1 bg-white p-8 md:p-16 lg:p-20 lg:overflow-y-auto"
+        >
+          <div className="max-w-4xl mx-auto space-y-20">
+            
+            {/* Executive Summary */}
+            {data.aboutMe && (
+              <motion.section variants={slideUp}>
+                <h2 className="text-3xl font-extrabold text-slate-900 mb-6 flex items-center gap-4">
+                  Executive Summary
+                  <span className="h-px bg-slate-200 flex-grow"></span>
+                </h2>
+                <p className="text-lg text-slate-600 leading-relaxed font-light">
+                  {data.aboutMe}
+                </p>
+              </motion.section>
+            )}
 
-          {/* Experience */}
-          {data.experience && data.experience.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-bold text-slate-800 border-b-2 border-slate-200 pb-2 mb-6 uppercase tracking-wider">Experience</h2>
-              <div className="space-y-8">
-                {data.experience.map((exp, index) => (
-                  <div key={index}>
-                    <div className="flex flex-col sm:flex-row justify-between items-baseline mb-1">
-                      <h3 className="text-xl font-semibold text-slate-900">{exp.role}</h3>
-                      <span className="text-sm font-medium text-slate-500 whitespace-nowrap">{exp.duration}</span>
+            {/* Professional Experience */}
+            {data.experience && data.experience.length > 0 && (
+              <motion.section variants={slideUp}>
+                <h2 className="text-3xl font-extrabold text-slate-900 mb-10 flex items-center gap-4">
+                  Professional Experience
+                  <span className="h-px bg-slate-200 flex-grow"></span>
+                </h2>
+                
+                <div className="relative border-l border-slate-200 ml-3 md:ml-4 space-y-12 pb-4">
+                  {data.experience.map((exp, index) => (
+                    <div key={index} className="relative pl-8 md:pl-10 group">
+                      {/* Timeline Node */}
+                      <div className="absolute w-3 h-3 bg-slate-300 rounded-full -left-[6.5px] top-2 ring-4 ring-white group-hover:bg-blue-600 group-hover:scale-125 transition-all duration-300"></div>
+                      
+                      <div className="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
+                        <h3 className="text-xl font-bold text-slate-900">{exp.role}</h3>
+                        <span className="text-sm font-bold tracking-wide text-slate-400 uppercase mt-1 md:mt-0">{exp.duration}</span>
+                      </div>
+                      <p className="text-md font-semibold text-blue-600 mb-4">{exp.company}</p>
+                      <p className="text-slate-600 leading-relaxed">
+                        {exp.description}
+                      </p>
                     </div>
-                    <p className="text-lg text-blue-600 font-medium mb-2">{exp.company}</p>
-                    <p className="text-neutral-600 leading-relaxed">
-                      {exp.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+                  ))}
+                </div>
+              </motion.section>
+            )}
 
-          {/* Projects */}
-          {data.projects && data.projects.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-bold text-slate-800 border-b-2 border-slate-200 pb-2 mb-6 uppercase tracking-wider">Key Projects</h2>
-              <div className="space-y-6">
-                {data.projects.map((proj, index) => (
-                  <div key={index} className="bg-neutral-50 p-5 rounded-lg border border-neutral-100">
-                    <h3 className="text-lg font-bold text-slate-800 mb-1">{proj.title || proj.name}</h3>
-                    <p className="text-neutral-600 text-sm mb-3">{proj.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {proj.techStack?.map((tech, i) => (
-                        <span key={i} className="text-xs font-semibold text-slate-600 bg-neutral-200 px-2 py-1 rounded">
-                          {tech}
-                        </span>
-                      )) || (
-                        <span className="text-xs font-semibold text-slate-600 bg-neutral-200 px-2 py-1 rounded">
-                          {proj.technologies}
-                        </span>
-                      )}
+            {/* Technical Projects */}
+            {data.projects && data.projects.length > 0 && (
+              <motion.section variants={slideUp}>
+                <h2 className="text-3xl font-extrabold text-slate-900 mb-10 flex items-center gap-4">
+                  Key Initiatives
+                  <span className="h-px bg-slate-200 flex-grow"></span>
+                </h2>
+                <div className="grid grid-cols-1 gap-6">
+                  {data.projects.map((proj, index) => (
+                    <div key={index} className="group bg-slate-50 border border-slate-200 rounded-xl p-8 hover:shadow-lg hover:border-blue-200 transition-all duration-300">
+                      <div className="flex flex-col md:flex-row md:justify-between md:items-baseline mb-3">
+                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{proj.title || proj.name}</h3>
+                        {(proj.link || proj.liveLink || proj.githubLink) && (
+                          <a href={proj.link || proj.liveLink || proj.githubLink} target="_blank" rel="noreferrer" className="text-sm font-bold text-blue-600 hover:underline mt-2 md:mt-0">
+                            View Project &rarr;
+                          </a>
+                        )}
+                      </div>
+                      <p className="text-slate-600 mb-6 font-light">
+                        {proj.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {proj.techStack?.map((tech, i) => (
+                          <span key={i} className="text-xs font-bold tracking-wider text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded uppercase">
+                            {tech}
+                          </span>
+                        )) || (
+                          <span className="text-xs font-bold tracking-wider text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded uppercase">
+                            {proj.technologies}
+                          </span>
+                        )}
+                      </div>
                     </div>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+
+            {/* Education & Achievements Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8">
+              
+              {/* Education */}
+              {data.education && data.education.length > 0 && (
+                <motion.section variants={slideUp}>
+                  <h2 className="text-2xl font-extrabold text-slate-900 mb-8 border-b border-slate-200 pb-4">Education</h2>
+                  <div className="space-y-6">
+                    {data.education.map((edu, index) => (
+                      <div key={index} className="relative">
+                        <h3 className="text-lg font-bold text-slate-900">{edu.degree}</h3>
+                        <p className="text-slate-600 font-medium">{edu.institution || edu.institute}</p>
+                        <p className="text-sm text-slate-400 font-semibold mt-1">{edu.year || `${edu.startYear} - ${edu.endYear}`}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </section>
-          )}
+                </motion.section>
+              )}
 
-          {/* Skills */}
-          {data.skills && data.skills.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-bold text-slate-800 border-b-2 border-slate-200 pb-2 mb-6 uppercase tracking-wider">Technical Skills</h2>
-              <div className="flex flex-wrap gap-2">
-                {data.skills.map((skill, index) => (
-                  <span key={index} className="px-4 py-2 bg-slate-100 text-slate-800 font-medium rounded text-sm border border-slate-200">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
+              {/* Achievements */}
+              {achievements && achievements.trim() && (
+                <motion.section variants={slideUp}>
+                  <h2 className="text-2xl font-extrabold text-slate-900 mb-8 border-b border-slate-200 pb-4">Achievements</h2>
+                  <ul className="space-y-4">
+                    {achievements.split('\n').filter(line => line.trim()).map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span className="text-blue-500 font-bold mt-0.5">&bull;</span>
+                        <span className="text-slate-600 leading-relaxed font-light">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.section>
+              )}
 
-          {/* Achievements — only shown when JD-matching content exists */}
-          {achievements && achievements.trim() && (
-            <section>
-              <h2 className="text-2xl font-bold text-slate-800 border-b-2 border-slate-200 pb-2 mb-4 uppercase tracking-wider">Achievements</h2>
-              <ul className="space-y-2">
-                {achievements.split('\n').filter(line => line.trim()).map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-neutral-700 text-sm">
-                    <span className="text-amber-500 font-bold mt-0.5">★</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-        </main>
+            </div>
+          </div>
+        </motion.main>
+        
       </div>
     </div>
   );

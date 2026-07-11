@@ -58,6 +58,7 @@ async function setupSelectedTemplate(
         minimal: "MinimalTemplate.jsx",
         modern: "ModernTemplate.jsx",
         professional: "ProfessionalTemplate.jsx",
+        techpro: "TechProTemplate.jsx",
     };
 
     const selectedTemplate = templateMap[
@@ -77,15 +78,17 @@ async function setupSelectedTemplate(
             )
     );
 
-    // Rewrite App.jsx to import only the selected template.
-    const componentName = selectedTemplate.replace(/\.jsx$/, "");
-
     const appContent = `import React from "react";
 import portfolio from "./data/portfolio";
+import { PortfolioContext } from "./context/PortfolioContext";
 import SelectedTemplate from "./templates/${componentName}";
 
 function App() {
-  return <SelectedTemplate data={portfolio} />;
+  return (
+    <PortfolioContext.Provider value={portfolio}>
+      <SelectedTemplate />
+    </PortfolioContext.Provider>
+  );
 }
 
 export default App;

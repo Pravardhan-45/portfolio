@@ -5,6 +5,7 @@ import { usePortfolio, PortfolioContext } from '../context/PortfolioContext';
 import MinimalTemplate from '../templates/MinimalTemplate';
 import ModernTemplate from '../templates/ModernTemplate';
 import ProfessionalTemplate from '../templates/ProfessionalTemplate';
+import TechProTemplate from '../templates/TechProTemplate';
 import TopNav from '../components/TopNav';
 
 const PortfolioPreview = () => {
@@ -107,6 +108,8 @@ const PortfolioPreview = () => {
         return <ModernTemplate />;
       case 'professional':
         return <ProfessionalTemplate />;
+      case 'techpro':
+        return <TechProTemplate />;
       default:
         return <ProfessionalTemplate />;
     }
@@ -178,6 +181,7 @@ const PortfolioPreview = () => {
             <option value="minimal">Minimal Theme</option>
             <option value="modern">Modern Theme</option>
             <option value="professional">Professional Theme</option>
+            <option value="techpro">TechPro Theme</option>
           </select>
           
           <button 
