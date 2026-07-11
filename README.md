@@ -78,3 +78,10 @@ Open your browser to `http://localhost:5173` to interact with the application.
 | `/userinfo` | Update Portfolio Details |
 | `/jd-upload` | Upload JD & Get AI Suggestions |
 | `/preview` | Live Portfolio Preview & Download |
+
+## Recent Production Deployment & Style Refinement (July 2026)
+- **Vercel-to-Render API proxying**: Added `vercel.json` rewrites to proxy all frontend `/api/*` endpoints directly to Render without manual environment variables setup.
+- **Template Heading Standardization**: Converted non-standard headings across all 4 themes (Minimal, Modern, Professional, TechPro) to professional names: **Skills**, **Projects**, **Experience**, and **Education**.
+- **TechPro Theme Restructuring**: Completely stripped command prompts (`$ whoami`, etc.) and terminal chrome decorations, swapping them for a premium dark mode developer card structure.
+- **ZIP Download Exporter Fixes**: Resolved critical reference errors during standalone ZIP compilation.
+- **Resilient AI Error Handling**: Integrated user-friendly fallback handlers for Gemini API quota limits and misconfigured keys.
