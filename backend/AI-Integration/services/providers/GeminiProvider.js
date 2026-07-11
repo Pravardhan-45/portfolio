@@ -35,6 +35,10 @@ class GeminiProvider extends AIProvider {
             }
         } catch (error) {
             console.error("GeminiProvider Error:", error);
+            const errStr = error.message || String(error);
+            if (errStr.includes("API_KEY_INVALID") || errStr.includes("key not valid") || errStr.includes("invalid") || errStr.includes("403")) {
+                throw new Error("Invalid Gemini API Key. Please get a valid API Key from Google AI Studio (https://aistudio.google.com/) and paste it as GEMINI_API_KEY in your backend/.env file.");
+            }
             throw error;
         }
     }
