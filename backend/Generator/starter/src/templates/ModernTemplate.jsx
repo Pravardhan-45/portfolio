@@ -49,7 +49,7 @@ const ModernTemplate = () => {
         description: "Secured a remote internship position focusing on technical solutions and software architecture. Optimized existing core logic for faster data retrieval."
       }
     ],
-    projects: projects?.length > 0 && projects[0].name ? projects : [
+    projects: projects?.length > 0 && (projects[0].name || projects[0].title) ? projects : [
       {
         title: "Flipkart GRiD 6.0 Challenge",
         description: "Participated in the competitive software development track involving technical quizzes and team-based engineering challenges.",
@@ -58,8 +58,8 @@ const ModernTemplate = () => {
       },
       {
         title: "Portfolio Generator",
-        description: "Dynamic web application with multiple template layouts and real-time preview functionality.",
-        techStack: ["React", "Tailwind CSS", "Node.js"],
+        description: "Dynamic web application with multiple template layouts and real-time preview.",
+        techStack: ["React", "Tailwind CSS"],
         link: "#"
       }
     ],
@@ -201,8 +201,8 @@ const ModernTemplate = () => {
               
               <div className="space-y-6 flex-grow">
                 {data.projects.map((proj, index) => (
-                  <div key={index} className="group bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 border border-slate-800/80 hover:border-slate-700 transition-all duration-300 flex flex-col h-full">
-                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-indigo-400 transition-colors">
+                  <div key={index} className="group bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 border border-slate-800/80 hover:border-slate-700 transition-all duration-300 flex flex-col">
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-indigo-400 transition-colors font-sans">
                       {proj.title || proj.name}
                     </h3>
                     <p className="text-slate-400 text-sm leading-relaxed mb-8 flex-grow font-light">
