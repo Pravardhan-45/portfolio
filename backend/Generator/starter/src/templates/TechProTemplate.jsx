@@ -62,50 +62,52 @@ const TechProTemplate = () => {
           
           <div className="p-8 md:p-12 font-mono text-sm md:text-base leading-relaxed flex flex-col md:flex-row gap-8 items-start">
             
-            <div className="flex-grow">
-              <div className="text-[#79c0ff] mb-2 flex items-center gap-2">
-                $ whoami 
-                <motion.span 
-                  animate={{ opacity: [1, 0] }} 
-                  transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
-                  className="w-2 h-4 bg-[#c9d1d9] inline-block"
-                />
-              </div>
-              <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight mb-6 font-sans">
-                {data.personalInfo.name}
-              </h1>
-              
-              {}
-              <div className="space-y-2">
-                <p>
-                  <span className="text-[#ff7b72]">const</span> <span className="text-[#79c0ff]">role</span> <span className="text-[#ff7b72]">=</span> <span className="text-[#a5d6ff]">"{data.personalInfo.role}"</span>;
-                </p>
-                <p>
-                  <span className="text-[#ff7b72]">const</span> <span className="text-[#79c0ff]">location</span> <span className="text-[#ff7b72]">=</span> <span className="text-[#a5d6ff]">"{data.personalInfo.location}"</span>;
-                </p>
-                <p className="pt-2">
-                  <span className="text-[#ff7b72]">import</span> &#123; <span className="text-[#d2a8ff]">Contact</span> &#125; <span className="text-[#ff7b72]">from</span> <span className="text-[#a5d6ff]">'./network'</span>;
-                </p>
-                
-                <div className="pt-6 flex flex-wrap gap-6 font-sans text-sm font-semibold">
-                  {data.personalInfo.email && (
-                    <a href={`mailto:${data.personalInfo.email}`} className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
-                      <span className="text-[#ff7b72] font-mono text-lg leading-none">▸</span> {data.personalInfo.email}
-                    </a>
-                  )}
-                  {data.socialLinks?.github && (
-                    <a href={data.socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
-                      <span className="text-[#ff7b72] font-mono text-lg leading-none">▸</span> GitHub
-                    </a>
-                  )}
-                  {data.socialLinks?.linkedin && (
-                    <a href={data.socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
-                      <span className="text-[#ff7b72] font-mono text-lg leading-none">▸</span> LinkedIn
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
+            <div className="flex-grow space-y-6">
+               <div>
+                 <div className="text-[#79c0ff] flex items-center gap-2 font-mono">
+                   $ whoami
+                   <motion.span 
+                     animate={{ opacity: [1, 0] }} 
+                     transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+                     className="w-2 h-4 bg-[#c9d1d9] inline-block"
+                   />
+                 </div>
+                 <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mt-2 font-sans">
+                   {data.personalInfo.name}
+                 </h1>
+               </div>
+ 
+               <div className="space-y-4 font-mono text-sm md:text-base">
+                 <div>
+                   <div className="text-[#79c0ff]">$ query --profile</div>
+                   <div className="mt-2 pl-4 space-y-1 text-[#c9d1d9]">
+                     <p><span className="text-[#ff7b72]">💼 Role:</span> {data.personalInfo.role}</p>
+                     <p><span className="text-[#ff7b72]">📍 Location:</span> {data.personalInfo.location}</p>
+                   </div>
+                 </div>
+ 
+                 <div>
+                   <div className="text-[#79c0ff]">$ list --contacts</div>
+                   <div className="pt-3 pl-4 flex flex-wrap gap-6 font-sans text-sm font-semibold">
+                     {data.personalInfo.email && (
+                       <a href={`mailto:${data.personalInfo.email}`} className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
+                         <span className="text-[#ff7b72] font-mono text-lg leading-none">▸</span> {data.personalInfo.email}
+                       </a>
+                     )}
+                     {data.socialLinks?.github && (
+                       <a href={data.socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
+                         <span className="text-[#ff7b72] font-mono text-lg leading-none">▸</span> GitHub
+                       </a>
+                     )}
+                     {data.socialLinks?.linkedin && (
+                       <a href={data.socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#8b949e] hover:text-[#58a6ff] transition-colors">
+                         <span className="text-[#ff7b72] font-mono text-lg leading-none">▸</span> LinkedIn
+                       </a>
+                     )}
+                   </div>
+                 </div>
+               </div>
+             </div>
 
             {}
             {data.personalInfo?.profilePhoto && (
