@@ -28,6 +28,49 @@ function JDUpload() {
     return String(data);
   };
 
+  // Validate a URL string; return it only if it's a usable http(s) link.
+  const isValidUrl = (url) => {
+    if (typeof url !== 'string') return false;
+    try {
+      const u = new URL(url.trim());
+      return u.protocol === 'http:' || u.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  };
+
+  // Build a per-missing-skill list of learning resources. Uses the AI's
+  // learningResources when present/valid, and always falls back to safe
+  // search links so a link is never broken or missing.
+  const buildLearningResources = () => {
+    const missing = renderArray(suggestions?.missingSkills);
+    if (missing.length === 0) return [];
+
+    // Index the AI-provided resources by skill name (case-insensitive).
+    const aiBySkill = {};
+    const rawResources = Array.isArray(suggestions?.learningResources) ? suggestions.learningResources : [];
+    rawResources.forEach(entry => {
+      if (entry && typeof entry === 'object' && typeof entry.skill === 'string') {
+        aiBySkill[entry.skill.trim().toLowerCase()] = Array.isArray(entry.resources) ? entry.resources : [];
+      }
+    });
+
+    return missing.map(skill => {
+      const cleanSkill = String(skill).trim();
+      const aiLinks = (aiBySkill[cleanSkill.toLowerCase()] || [])
+        .filter(r => r && typeof r === 'object' && isValidUrl(r.url))
+        .map(r => ({ title: typeof r.title === 'string' && r.title.trim() ? r.title.trim() : r.url, url: r.url.trim() }));
+
+      // Always guarantee at least a couple of usable links via search fallback.
+      const fallbackLinks = [
+        { title: `YouTube: learn ${cleanSkill}`, url: `https://www.youtube.com/results?search_query=${encodeURIComponent('learn ' + cleanSkill + ' tutorial')}` },
+        { title: `Google: ${cleanSkill} documentation`, url: `https://www.google.com/search?q=${encodeURIComponent(cleanSkill + ' official documentation tutorial')}` }
+      ];
+
+      return { skill: cleanSkill, resources: aiLinks.length > 0 ? aiLinks : fallbackLinks };
+    });
+  };
+
   const handleAnalyze = async () => {
     if (!file) {
       setError("Please upload a PDF job description first.");
@@ -162,6 +205,38 @@ function JDUpload() {
                     ))}
                   </div>
                 </div>
+
+                {/* Learning Resources Card (for the missing skills above) */}
+                {buildLearningResources().length > 0 && (
+                  <div className="glass-dark p-6 rounded-2xl border border-slate-800 md:col-span-2 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-sky-500"></div>
+                    <h3 className="font-bold text-white text-base mb-4 flex items-center gap-2 font-display">
+                      <span>📚</span> Learning Resources
+                    </h3>
+                    <p className="text-xs text-slate-500 mb-5 font-light">Curated links to help you close the gap on the missing skills above.</p>
+                    <div className="space-y-5">
+                      {buildLearningResources().map((entry, i) => (
+                        <div key={i}>
+                          <h4 className="text-sm font-bold text-sky-400 mb-2">{entry.skill}</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {entry.resources.map((res, j) => (
+                              <a
+                                key={j}
+                                href={res.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3.5 py-1.5 bg-sky-500/10 text-sky-300 border border-sky-500/20 rounded-xl text-xs font-semibold hover:bg-sky-500/20 transition-colors inline-flex items-center gap-1.5"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                {res.title}
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Recommended Projects Card */}
                 <div className="glass-dark p-6 rounded-2xl border border-slate-800 md:col-span-2 relative overflow-hidden">

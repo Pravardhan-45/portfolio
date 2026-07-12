@@ -28,6 +28,8 @@ For "missingSkills": List skills mentioned in the JD that are NOT found in the p
 
 For "recommendedProjects": Suggest 2 practical projects that would help demonstrate missing skills.
 
+For "learningResources": For EACH skill listed in "missingSkills", provide 2-3 real, well-known learning links to help the candidate learn it. Prefer famous, reputable sources: official documentation, MDN, freeCodeCamp, popular YouTube tutorials, or well-known course platforms (Coursera, Udemy, etc.). Each link MUST be a real, working URL. Structure it as an array of objects, one object per missing skill, each with a "skill" string and a "resources" array of { "title", "url" } objects. Return an empty array [] if there are no missing skills.
+
 For "relevantAchievements": Review the portfolio achievements field and include:
 - Competitive programming achievements (LeetCode rating/badges, HackerRank, Codeforces, etc.)
 - Hackathon wins or rankings
@@ -47,6 +49,9 @@ For "generatedSummary": Write in FIRST PERSON as the candidate themselves.
 {
   "highlightSkills": ["skill1", "skill2"],
   "missingSkills": ["skill3"],
+  "learningResources": [
+    { "skill": "skill3", "resources": [{ "title": "Official Docs", "url": "https://example.com/docs" }, { "title": "freeCodeCamp Tutorial", "url": "https://youtube.com/watch?v=xxxx" }] }
+  ],
   "recommendedProjects": ["Project description 1"],
   "relevantAchievements": ["Achievement relevant to JD"],
   "generatedSummary": "I am a passionate [role] with expertise in [skills]..."

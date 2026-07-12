@@ -53,7 +53,6 @@ const PortfolioPreview = () => {
     };
 
     const aiHighlightSkills = parseArray(suggestions.highlightSkills);
-    const aiMissingSkills = parseArray(suggestions.missingSkills).map(s => `${s} (Learning)`);
 
     // Filter user's existing projects that have technologies matching highlighted JD skills
     const jdSkillsLower = aiHighlightSkills.map(s => s.toLowerCase());
@@ -84,8 +83,9 @@ const PortfolioPreview = () => {
       aboutMe: typeof suggestions.generatedSummary === 'string' 
         ? suggestions.generatedSummary 
         : (suggestions.generatedSummary ? JSON.stringify(suggestions.generatedSummary) : aboutMe),
-      // Strong JD-matching skills first, then AI highlights, then missing skills to learn
-      skills: [...new Set([...aiHighlightSkills, ...skills, ...aiMissingSkills])],
+      // Only skills the candidate actually has: JD-matching highlights + their own skills.
+      // Missing skills are intentionally NOT added here — they belong on the JD analysis page, not the portfolio.
+      skills: [...new Set([...aiHighlightSkills, ...skills])],
       // JD-relevant user projects first, then AI recommended, then remaining original
       projects: [...relevantUserProjects, ...aiProjects, ...otherUserProjects],
       // Include filtered achievements

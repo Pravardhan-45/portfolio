@@ -35,7 +35,8 @@ A web application that enables users to create professional portfolio websites w
 - **AI-Optimized Portfolio Preview**: After AI analysis, the user can click "Preview AI-Optimized Portfolio" which intelligently merges:
   - Personal details, photo, education, and experience kept intact from the original.
   - AI's first-person `generatedSummary` replaces the About Me section.
-  - AI's `highlightSkills` combined with original skills; `missingSkills` added as `(Learning)`.
+  - AI's `highlightSkills` combined with original skills (only skills the candidate actually has; `missingSkills` are NOT added to the portfolio).
+  - Missing skills are shown separately on the JD analysis page as a "Learning Resources" list with suggested links to learn them.
   - AI's `recommendedProjects` appended with smart, descriptive titles.
 - **Optimized ZIP Download**: When downloading from the AI-Optimized preview, the ZIP contains the fully merged AI-optimized data.
 - **Crash Protection**: Implemented `safeString` parser to guarantee the UI never crashes from unexpected AI output formats.
